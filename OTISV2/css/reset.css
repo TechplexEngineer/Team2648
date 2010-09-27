@@ -1,0 +1,110 @@
+/*		Resetting Stylesheet		*/
+
+/*		1.	RESET MAIN ELEMENTS		*/
+/*		2.	COMMON CLASSES			*/
+/*		3.	TYPOGRAPHY				*/
+/*		4.	FORMS					*/
+
+/** 1.	RESET MAIN ELEMENTS **/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, 
+*, .x {												/* .x removes any inherent styling to elements below */
+                   margin: 0;
+                   padding: 0;
+                   color: #333;
+                   /*	background: transparent;*/
+                   font-family: "Arial", "Helvetica", sans-serif;
+                   font-size: 101%;
+                   font-weight: normal;
+                   font-style: normal;
+                   line-height: 1.60em;
+                   text-decoration: none;
+                   text-align: left;
+                   vertical-align: baseline;
+                   /*	border: 0;*/
+                   outline: 0;
+}
+:focus {
+    outline: 0;
+}
+
+hr {
+    display: block;
+    width: 100%;
+    height: 1px;
+    color: #aaa;
+    background: #aaa;
+    border: none;
+}
+
+
+/** 3.	TYPOGRAPHY **/
+
+
+strong			{ font-weight: 		bold;		}
+
+h1, h2, h3, 
+h4, h5, h6 { font-weight: bold; }
+h1 {  font-size: 3.00em; 	}
+h2 {  font-size: 2.50em; 	}
+h3 {  font-size: 2.00em; 	}
+h4 {  font-size: 1.60em; 	}
+h5 {  font-size: 1.20em; 	}
+h6 {  font-size: 1.00em; 	}
+
+a {
+    color: #06f;
+    background-color: inherit;
+    text-decoration: underline;
+}
+a:visited 	{ color: #99c; background: inherit; }
+a:hover 	{ color: #222; background: inherit; }
+a:active 	{ color: #333; background: inherit; }
+
+
+
+
+
+
+
+/** 4.	FORMS **/
+label {
+    display: block;
+    float: left;
+    padding: 3px;
+    font-weight: bold;
+}
+
+
+input.default, textarea.default,
+select.default {
+    float: left;
+    padding: 3px;
+    border: 1px solid #aaa;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+button {
+    padding: 2px 5px;
+    color: white;
+    background-color: black;
+    font-weight: bold;
+    text-align: center;
+    border: 0;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+/** END **/
