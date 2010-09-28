@@ -12,8 +12,26 @@ if (isset($_REQUEST['acceptID']))
 
     $sql = "INSERT INTO `tims`.`public_profile`"
             . "(`id`, `nickname`, `location`, `role`, `yog`, `interests`, `favMoment`, `gainThisYr`, `futurePlans`, `bio`) \n"
-            . "VALUES ('" . $_SESSION['id'] . "', '" . $row['nickname'] . "', '" . $row['location'] . "', '" . $row['role'] . "', '" . $row['yog'] . "', '" . $row['interests'] . "', '" . $row['favMoment'] . "', '" . $row['gainThisYr'] . "', '" . $row['futurePlans'] . "', '" . $row['bio'] . "')\n"
-            . "ON DUPLICATE KEY UPDATE nickname ='" . $row['nickname'] . "', location='" . $row['location'] . "', role= '" . $row['role'] . "', yog='" . $row['yog'] . "', interests='" . $row['interests'] . "', favMoment='" . $row['favMoment'] . "', gainThisYr='" . $row['gainThisYr'] . "', futurePlans='" . $row['futurePlans'] . "', bio='" . $row['bio'] . "'\n";
+            . "VALUES ( '" . $_SESSION['id'] . "',
+                        '" . mysql_real_escape_string($row['nickname']) . "',
+                        '" . mysql_real_escape_string($row['location']) . "',
+                        '" . mysql_real_escape_string($row['role']) . "',
+                        '" . mysql_real_escape_string($row['yog']) . "',
+                        '" . mysql_real_escape_string($row['interests']) . "',
+                        '" . mysql_real_escape_string($row['favMoment']) . "',
+                        '" . mysql_real_escape_string($row['gainThisYr']) . "',
+                        '" . mysql_real_escape_string($row['futurePlans']) . "',
+                        '" . mysql_real_escape_string($row['bio']) . "')\n"
+            . "ON DUPLICATE KEY UPDATE 
+                nickname        ='" . mysql_real_escape_string($row['nickname']) . "',
+                location        ='" . mysql_real_escape_string($row['location']) . "',
+                role            ='" . mysql_real_escape_string($row['role']) . "',
+                yog             ='" . mysql_real_escape_string($row['yog']) . "',
+                interests       ='" . mysql_real_escape_string($row['interests']) . "',
+                favMoment       ='" . mysql_real_escape_string($row['favMoment']) . "',
+                gainThisYr      ='" . mysql_real_escape_string($row['gainThisYr']) . "',
+                futurePlans     ='" . mysql_real_escape_string($row['futurePlans']) . "',
+                bio             ='" . mysql_real_escape_string($row['bio']) . "'\n";
     $qry = mysql_query($sql) or die(mysql_error());
 
     echo "User " . $_SESSION['id'] . ", profile approved.<br><br>";

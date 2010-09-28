@@ -51,9 +51,11 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
     //http://www.position-absolute.com/articles/jquery-form-validator-because-form-validation-is-a-mess/
     //die(print_r($_REQUEST));
     //$usrtype = "member";
-    $usrtype = $_REQUEST['as'];
+    $usrtype = mysql_real_escape_string($_REQUEST['as']);
     $myusername = $_REQUEST['fname'] . "." . $_REQUEST['lname'];
-    $sql = "INSERT INTO `" . $login_table . "` (`id`, `firstname`, `lastname`, `user`, `pass`, `email`, `type`) VALUES (NULL, '" . $_REQUEST['fname'] . "', '" . $_REQUEST['lname'] . "', '" . $myusername . "', '" . sha1($_REQUEST['pass']) . "', '" . $_REQUEST['email'] . "', '" . $usrtype . "')";
+    $sql = "INSERT INTO `" . $login_table . "`
+        (`id`, `firstname`, `lastname`, `user`, `pass`, `email`, `type`) VALUES
+        (NULL, '" . mysql_real_escape_string($_REQUEST['fname']) . "', '" . mysql_real_escape_string($_REQUEST['lname']) . "', '" . $myusername . "', '" . mysql_real_escape_string(sha1($_REQUEST['pass'])) . "', '" . mysql_real_escape_string($_REQUEST['email']) . "', '" . $usrtype . "')";
     $qry = mysql_query($sql) or die(mysql_error());
 
     $sql = "SELECT * FROM `" . $login_table . "` WHERE user='" . $myusername . "'";
@@ -69,7 +71,7 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
     $_SESSION['email'] = $row['email'];
     $_SESSION['type'] = $row['type'];
     
-    header("location:lib/success.php");
+    header("location:success.php");
     exit;
 }
 

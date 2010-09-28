@@ -17,16 +17,25 @@ if (isset($_REQUEST['Submit']))
         //"UPDATE `tims`.`pending_profile` SET `nickname` = 'I Don''t Have One' WHERE `pending_profile`.`id` = 1;";
         $sql = "INSERT INTO `tims`.`econtact`"
                 . "(`id`, `ec1_fullname`, `ec1_email`, `ec1_mailingaddress`, `ec1_homephone`, `ec1_workphone`, `ec1_cellphone`, `ec1_relation`, `ec1_bestway`) \n"
-                . "VALUES ('" . $_SESSION['id'] . "', '" . $_REQUEST['ec1_fullname'] . "', '" . $_REQUEST['ec1_email'] . "', '" . $_REQUEST['ec1_mailingaddress'] . "', '" . $_REQUEST['ec1_homephone'] . "', '" . $_REQUEST['ec1_workphone'] . "','" . $_REQUEST['ec1_cellphone'] . "','" . $_REQUEST['ec1_relation'] . "','" . $_REQUEST['ec1_bestway'] . "')\n"
+                . "VALUES (
+                    '" . mysql_real_escape_string($_SESSION['id']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_fullname']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_email']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_mailingaddress']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_homephone']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_workphone']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_cellphone']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_relation']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['ec1_bestway']) . "')\n"
                 . "ON DUPLICATE KEY UPDATE "
-                    . "   ec1_fullname ='"          . $_REQUEST['ec1_fullname']
-                    . "', ec1_email='"              . $_REQUEST['ec1_email']
-                    . "', ec1_mailingaddress= '"    . $_REQUEST['ec1_mailingaddress']
-                    . "', ec1_homephone='"          . $_REQUEST['ec1_homephone']
-                    . "', ec1_workphone='"          . $_REQUEST['ec1_workphone']
-                    . "', ec1_cellphone='"          . $_REQUEST['ec1_cellphone']
-                    . "', ec1_relation='"           . $_REQUEST['ec1_relation']
-                    . "', ec1_bestway='"            . $_REQUEST['ec1_bestway']
+                    . "   ec1_fullname ='"          . mysql_real_escape_string($_REQUEST['ec1_fullname'])
+                    . "', ec1_email='"              . mysql_real_escape_string($_REQUEST['ec1_email'])
+                    . "', ec1_mailingaddress= '"    . mysql_real_escape_string($_REQUEST['ec1_mailingaddress'])
+                    . "', ec1_homephone='"          . mysql_real_escape_string($_REQUEST['ec1_homephone'])
+                    . "', ec1_workphone='"          . mysql_real_escape_string($_REQUEST['ec1_workphone'])
+                    . "', ec1_cellphone='"          . mysql_real_escape_string($_REQUEST['ec1_cellphone'])
+                    . "', ec1_relation='"           . mysql_real_escape_string($_REQUEST['ec1_relation'])
+                    . "', ec1_bestway='"            . mysql_real_escape_string($_REQUEST['ec1_bestway'])
                     . "'\n";
         $qry = mysql_query($sql) or die(mysql_error());
 

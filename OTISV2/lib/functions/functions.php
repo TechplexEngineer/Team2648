@@ -28,16 +28,16 @@ function update_data($table, $varkey, $data, $varverb) {
     foreach ($data as $f => $v) {
 
         $sql = "UPDATE " . $table . " SET
-				value = '" . $v . "',
+				value = '" . mysql_real_escape_string($v) . "',
 				timestamp = NOW()
-				WHERE uuid = '" . $varkey . "' AND field = '" . $f . "'";
+				WHERE uuid = '" . mysql_real_escape_string($varkey) . "' AND field = '" . mysql_real_escape_string($f) . "'";
         //echo $sql."<br>\n";
 
         $result = mysql_query($sql) or die("ERROR: SYNTAX1 " . mysql_error());
 
         if (mysql_affected_rows() == 0) {
             $sql = "INSERT INTO " . $table . " (uuid,field,value,timestamp)
-					VALUES ('" . $varkey . "', '" . $f . "','" . $v . "',NOW())";
+					VALUES ('" . mysql_real_escape_string($varkey) . "', '" . mysql_real_escape_string($f) . "','" . mysql_real_escape_string($v) . "',NOW())";
             $result = mysql_query($sql) or die("ERROR: SYNTAX2 " . mysql_error());
         }
     }
@@ -60,7 +60,7 @@ function retrieve_values($table, $varkey, $data, $varverb, $varsep) {
 
     if (in_array('ALL_DATA', $data)) {
         $sql = "SELECT * FROM $table
-				WHERE uuid = '$varkey'";
+				WHERE uuid = '".mysql_real_escape_string($varkey)."'";
         $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
         while ($row = mysql_fetch_assoc($result)) {
             if ($row['value'] == '') {

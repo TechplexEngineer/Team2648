@@ -17,12 +17,21 @@ if (isset($_REQUEST['Submit']))
         //"UPDATE `tims`.`pending_profile` SET `nickname` = 'I Don''t Have One' WHERE `pending_profile`.`id` = 1;";
         $sql = "INSERT INTO `tims`.`personal_information`"
                 . "(`id`, `homephone`, `cellphone`, `medications`, `mailaddress`) \n"
-                . "VALUES ('" . $_SESSION['id'] . "', '" . $_REQUEST['homephone'] . "', '" . $_REQUEST['cellphone'] . "', '" . $_REQUEST['medications'] . "', '" . $_REQUEST['mailaddress'] . "')\n"
-                . "ON DUPLICATE KEY UPDATE homephone ='" . $_REQUEST['homephone'] . "', cellphone='" . $_REQUEST['cellphone'] . "', medications= '" . $_REQUEST['medications'] . "', mailaddress='" . $_REQUEST['mailaddress'] . "'\n";
+                . "VALUES (
+                    '" . mysql_real_escape_string($_SESSION['id']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['homephone']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['cellphone']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['medications']) . "',
+                    '" . mysql_real_escape_string($_REQUEST['mailaddress']) . "')\n"
+                . "ON DUPLICATE KEY UPDATE 
+                    homephone ='"   . mysql_real_escape_string($_REQUEST['homephone']) . "',
+                    cellphone='"    . mysql_real_escape_string($_REQUEST['cellphone']) . "',
+                    medications= '" . mysql_real_escape_string($_REQUEST['medications']) . "',
+                    mailaddress='"  . mysql_real_escape_string($_REQUEST['mailaddress']) . "'\n";
         $qry = mysql_query($sql) or die(mysql_error());
 
         //SQL 4 email
-        $sql ="UPDATE `tims_users` SET email = '" .$_REQUEST['email']."' WHERE id = ". $_SESSION['id'];
+        $sql ="UPDATE `tims_users` SET email = '" .mysql_real_escape_string($_REQUEST['email'])."' WHERE id = ". $_SESSION['id'];
         $qry = mysql_query($sql) or die(mysql_error());
 
 //@todo overlay this
