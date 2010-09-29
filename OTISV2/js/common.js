@@ -94,7 +94,7 @@ function login()
 {
     console.log("logintoggle");
     $.ajax({
-        url: "lib/io.php?name=cblogin&val="+document.controlsForm.loginbox.checked,
+        url: "lib/functions/io.php?name=cblogin&val="+document.controlsForm.loginbox.checked,
         cache: false,
         success: function(html){
             console.log(html);
@@ -108,7 +108,7 @@ function reg()
 {
     console.log("regtoggle");
     $.ajax({
-        url: "lib/io.php?name=cbreg&val="+document.controlsForm.regbox.checked,
+        url: "lib/functions/io.php?name=cbreg&val="+document.controlsForm.regbox.checked,
         cache: false,
         success: function(html){
             console.log(html);

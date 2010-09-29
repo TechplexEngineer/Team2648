@@ -2,7 +2,7 @@
 include "vars.php";
 $sql = "SELECT tims_users.*, personal_information.homephone, personal_information.cellphone, personal_information.medications, personal_information.mailaddress FROM tims_users LEFT OUTER JOIN personal_information
     ON tims_users.id = personal_information.id
-    ORDER BY lastname, firstname ASC";
+    ORDER BY firstname, lastname ASC";
 //echo $sql;
 $qry = mysql_query($sql) or die(mysql_error());
 

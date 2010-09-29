@@ -5,19 +5,30 @@ include "vars.php";
 include "mail.php";
 include "io.php";
 
-if($registrationDisabled)
+if ($registrationDisabled)
     die("I'm Sorry we are not acepting new registrations.");
 
 if (!empty($_REQUEST['fname']))//The form has been submitted
 {
-    //**** PHP Validation ****
+    //die("firstname"); 
     $error = false;
-    if($_REQUEST['pass'] != $_REQUEST['pass2'])
+    //** Check for duplicate username
+    $sql = "SELECT * FROM " . $login_table . " WHERE user = '" . mysql_real_escape_string(stripslashes($_REQUEST['fname'])) . "." . mysql_real_escape_string(stripslashes($_REQUEST['lname'])) . "'";
+    $query = mysql_query($sql) or die(mysql_error());
+    if (mysql_num_rows($query) >= 1)
+    {
+
+        echo "<h3>You have already created an account.</h3> \n<br> Try to login, with Firstname.Lastname \n<br> If you can't remember your password, send blake (at) team2648.com an email.";
+        exit;
+    }
+    //**** PHP Validation ****
+
+    if ($_REQUEST['pass'] != $_REQUEST['pass2'])
     {
         $error = true;
         echo ("Your passwords do not match\n<br/>");
     }
-    if(!(strlen($_REQUEST['pass']) >= 6 && strlen($_REQUEST['pass']) <= 20))
+    if (!(strlen($_REQUEST['pass']) >= 6 && strlen($_REQUEST['pass']) <= 20))
     {
         $error = true;
         echo ("Your password must have at least 6 characters, and no more than 20\n<br/>");
@@ -33,20 +44,19 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
         $error = true;
         echo "Please enter a valid Email address";
     }
-    if (!preg_match('%^[A-Za-z]+$%', $_REQUEST['fname']) || is_numeric($_REQUEST['fname']) )
+    if (!preg_match('%^[A-Za-z]+$%', $_REQUEST['fname']) || is_numeric($_REQUEST['fname']))
     {
         $error = true;
         echo ("Your name may only contain letters\n<br/>");
     }
-    if (!preg_match('%^[A-Za-z]+$%', $_REQUEST['lname']) || is_numeric($_REQUEST['lname']) )
+    if (!preg_match('%^[A-Za-z]+$%', $_REQUEST['lname']) || is_numeric($_REQUEST['lname']))
     {
         $error = true;
         echo ("Your name may only contain letters\n<br/>");
     }
-    if($error)
+    if ($error)
     {
-        echo "<br/><strong>Please go back and fix the errors above.</strong>";
-        exit;
+        die("<br/><strong>Please go back and fix the errors above.</strong>");
     }
     //http://www.position-absolute.com/articles/jquery-form-validator-because-form-validation-is-a-mess/
     //die(print_r($_REQUEST));
@@ -70,7 +80,7 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
     $_SESSION['fullname'] = $row['firstname'] . " " . $row['lastname'];
     $_SESSION['email'] = $row['email'];
     $_SESSION['type'] = $row['type'];
-    
+
     header("location:success.php");
     exit;
 }
@@ -120,18 +130,18 @@ echo "<h3>Register yourself here</h3>";
         <tr>
             <td><label for="as">I am registering as:</label><td>
             <td>
-            
-<select name="as">
-  <option>Member</option>
-  <option>Parent</option>
-  <option>Mentor</option>
-  <option>Alumni</option>
-</select>
-            
-            <!--<input type="text" id="e2"class="validate[required,confirm[e1]] text-input" name="email2" />-->
+
+                <select name="as">
+                    <option>Member</option>
+                    <option>Parent</option>
+                    <option>Mentor</option>
+                    <option>Alumni</option>
+                </select>
+
+<!--<input type="text" id="e2"class="validate[required,confirm[e1]] text-input" name="email2" />-->
             <td>
         </tr>
     </table>
-<?php include "disclaimer.php"; ?>
+    <?php include "disclaimer.php"; ?>
     <br><input type="submit" id="submit" name="Submit" value="I Agree, Create My account">
 </form>

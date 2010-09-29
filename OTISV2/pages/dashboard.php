@@ -44,7 +44,7 @@ if ($_SESSION['type'] == "member" || $_SESSION['type'] == "Member")
     //echo "</div>";
 }
 
-if ($_SESSION['id'] == "1" || $_SESSION['id'] == "2") // It it blake?
+if ($_SESSION['id'] == "1" || $_SESSION['id'] == "2") // It it blake or missluce
 
 {
     echo "<div id=\"logins\" class=\"widget\">";
