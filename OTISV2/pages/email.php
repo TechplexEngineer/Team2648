@@ -12,11 +12,24 @@
 
 <div id="mail">Mail 
     <br>
-    <textarea> lol </textarea>
+    <table width="100%">
+        <tr>
+            <td><label for="To">To</label></td>
+            <td><input type="textbox" name="To" /></td>
+        </tr>
+        <tr>
+            <td><label for="Subject">Subject</label></td>
+            <td><input type="textbox" name="Subject" /></td>
+        </tr>
+        <tr>
+            <td valign="top"><label for="Message">Message</label></td>
+            <td><textarea name="Message" width="100%"> lol </textarea></td>
+        </tr>
+    </table> 
 </div>
 <div id="text">
 	Text 
-    <br>
+    <br>  
     <textarea> lol </textarea>
 </div>
 
