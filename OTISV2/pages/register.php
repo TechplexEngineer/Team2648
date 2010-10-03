@@ -61,7 +61,7 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
     //http://www.position-absolute.com/articles/jquery-form-validator-because-form-validation-is-a-mess/
     //die(print_r($_REQUEST));
     //$usrtype = "member";
-    $usrtype = mysql_real_escape_string($_REQUEST['as']);
+    $usrtype = strtolower(mysql_real_escape_string($_REQUEST['as']));
     $myusername = $_REQUEST['fname'] . "." . $_REQUEST['lname'];
     $sql = "INSERT INTO `" . $login_table . "`
         (`id`, `firstname`, `lastname`, `user`, `pass`, `email`, `type`) VALUES

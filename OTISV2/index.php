@@ -36,7 +36,8 @@ include "hours.php";
 
         <script src="js/jquery.js" type="text/javascript"></script>
         <script src="js/jquery.validationEngine-en.js" type="text/javascript"></script>
-        <script src="js/jquery.validationEngine.js" type="text/javascript"></script><link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" media="screen" charset="utf-8" />
+        <script src="js/jquery.validationEngine.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" media="screen" charset="utf-8" />
 
 
         <script src="js/common.js" type="text/javascript"></script>

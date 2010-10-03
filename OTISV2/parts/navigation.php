@@ -4,12 +4,12 @@
     include "vars.php";
     if ($_SESSION['user'] != "register")
     {
-    echo "<li> Me </li>";
+    echo "<li> My </li>";
     echo "<ul>";
         echo "<li><a href=\"./\"> Dashboard </a></li>";
-        echo "<li><a href=\"?page=manage.profile\"> My Profile</a></li>";
-        echo "<li><a href=\"?page=manage.info\"> My Info</a></li>";
-        echo "<li><a href=\"?page=manage.econtact\"> E Contact</a></li>";
+        echo "<li><a href=\"?page=manage.profile\"> Profile</a></li>";
+        echo "<li><a href=\"?page=manage.info\"> Information</a></li>";
+        echo "<li><a href=\"?page=manage.econtact\"> Emergency Contact</a></li>";
         echo "</ul>";
     }
     

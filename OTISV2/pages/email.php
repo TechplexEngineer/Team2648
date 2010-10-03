@@ -1,3 +1,6 @@
+<script src="js/jquery-1.4.2.min.js" type="text/javascript"></script>
+<script src="js/jquery-ui-1.8.1.custom.min.js" type="text/javascript"></script>
+<script src="js/jquery.autofocus-min.js" type="text/javascript"></script>
 
 <div id="send">
     What would you like to do?

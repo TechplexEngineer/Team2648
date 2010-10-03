@@ -154,21 +154,23 @@ function makeNotVis(divID) {
     document.getElementByClass(divID).style.display = "none";
 }
 
-function toggleVis(name)
+//** Legacy **\\
+function toggleVisTD(name)
 {
     //if($(item).style.display == "none")
         if($('td.'+name).css('display') != "none")
             $('td.'+name).css('display', 'none');
         else
              $('td.'+name).css('display', 'table-cell');
-          
-          
-          
-          
-          ////.style.display = "none";
-
-    //if($(item).style.display == "block")
-    //    $(item).style.display = "none";
+}
+//** End Legacy **\\
+function toggleVis(name)
+{
+    //if($(item).style.display == "none")
+        if($('.'+name).css('display') != "none")
+            $('.'+name).css('display', 'none');
+        else
+             $('.'+name).css('display', 'table-cell');
 }
 
 

@@ -140,10 +140,10 @@ div#text
 /*visibility: hidden;*/
 display: none;
 }
-
-
-.ln{display: table-cell;}
-.fn{display: table-cell;}
+.id{display: none;}
+.fl{display: table-cell;}
+.ln{display: none;}
+.fn{display: none;} 
 .em{display: table-cell;}
 .ty{display: none;}
 .hp{display: none;}
@@ -151,5 +151,12 @@ display: none;
 .me{display: none;}
 .ad{display: none;}
 
-
+/* Sortable tables */
+table.sortable th {
+    background-color:#eee;
+    color:#666666;
+    font-weight: bold;
+    cursor:pointer;
+    /*cursor: default;*/
+}
 
