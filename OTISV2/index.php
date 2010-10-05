@@ -83,7 +83,7 @@ include "hours.php";
 			include "lib/functions/io.php";
 			if (empty($page))
 			    if ($_SESSION['user'] != "register")
-				include "parts/dashboard.php";
+				include "pages/dashboard.php";
 			    else
 				echo "I'm Sorry Something went wrong.";
 			elseif (file_exists("pages/" . $page . ".php"))

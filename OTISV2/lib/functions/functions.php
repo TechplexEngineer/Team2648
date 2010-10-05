@@ -1,5 +1,39 @@
 <?php
 
+function YOG($yog)
+{
+    $year = date('Y');
+    $month = date('m');
+    
+    if($month < 6)
+    {
+        if($yog - $year == 0)
+            return "Senior";
+        elseif($yog - $year == 1)
+            return "Junior";
+        elseif($yog - $year == 2)
+            return "Sophomore";
+        elseif($yog - $year == 3)
+            return "Freshman";
+        else
+            return "ERROR";
+    }else
+    {
+        if($yog - $year == 0)
+            return "Alumni";
+        elseif($yog - $year == 1)
+            return "Senior";
+        elseif($yog - $year == 2)
+            return "Junior";
+        elseif($yog - $year == 3)
+            return "Sophomore";
+        elseif($yog - $year == 4)
+            return "Freshman";
+        else
+            return "ERROR";
+    }
+}
+
 ######################################################################
 # FUNCTIONS
 #
@@ -8,13 +42,16 @@
 
 // This function takes the two arrays taken in as parameters, and makes a new 2D array,
 // With each element in $varfields as the key for the corresponding element in $varvalues
-function combine_arrays($varfields, $varvalues) {
-    if (count($varfields) != count($varvalues)) {
+function combine_arrays($varfields, $varvalues)
+{
+    if (count($varfields) != count($varvalues))
+    {
         die("ERROR: UNMATCHED PARAMETERS");
     }
 
     $result = array();
-    while (($key = each($varfields)) && ($val = each($varvalues))) {
+    while (($key = each($varfields)) && ($val = each($varvalues)))
+    {
         $result[$key[1]] = $val[1];
     }
     return($result);
@@ -24,24 +61,27 @@ function combine_arrays($varfields, $varvalues) {
 // $varkey  = owner's UUID
 // $data    = A 2D array with Field => Value
 // $varverb = output verbose text or not
-function update_data($table, $varkey, $data, $varverb) {
-    foreach ($data as $f => $v) {
+function update_data($table, $varkey, $data, $varverb)
+{
+    foreach ($data as $f => $v)
+    {
 
         $sql = "UPDATE " . $table . " SET
-				value = '" . mysql_real_escape_string($v) . "',
-				timestamp = NOW()
+				value = '" . mysql_real_escape_string($v) . "',timestamp = NOW()
 				WHERE uuid = '" . mysql_real_escape_string($varkey) . "' AND field = '" . mysql_real_escape_string($f) . "'";
         //echo $sql."<br>\n";
 
         $result = mysql_query($sql) or die("ERROR: SYNTAX1 " . mysql_error());
 
-        if (mysql_affected_rows() == 0) {
+        if (mysql_affected_rows() == 0)
+        {
             $sql = "INSERT INTO " . $table . " (uuid,field,value,timestamp)
 					VALUES ('" . mysql_real_escape_string($varkey) . "', '" . mysql_real_escape_string($f) . "','" . mysql_real_escape_string($v) . "',NOW())";
             $result = mysql_query($sql) or die("ERROR: SYNTAX2 " . mysql_error());
         }
     }
-    if ($varverb == true) {
+    if ($varverb == true)
+    {
         return "SUCCESS: UPDATED " . count($data) . " RECORDS.";
     }
     else
@@ -55,41 +95,52 @@ function update_data($table, $varkey, $data, $varverb) {
 // $varverb = output verbose text or not
 // $varsep  = value to put between outputed data
 //'ALL_DATA'
-function retrieve_values($table, $varkey, $data, $varverb, $varsep) {
+function retrieve_values($table, $varkey, $data, $varverb, $varsep)
+{
     $return = array();
 
-    if (in_array('ALL_DATA', $data)) {
+    if (in_array('ALL_DATA', $data))
+    {
         $sql = "SELECT * FROM $table
 				WHERE uuid = '".mysql_real_escape_string($varkey)."'";
         $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
-        while ($row = mysql_fetch_assoc($result)) {
-            if ($row['value'] == '') {
+        while ($row = mysql_fetch_assoc($result))
+        {
+            if ($row['value'] == '')
+            {
                 $row['value'] = 'NO_DATA';
             }
-            if ($varverb) {
+            if ($varverb)
+            {
                 $return[] = $row['field'];
             }
             $return[] = $row['value'];
         }
-    } else {
-        foreach ($data as $f) {
+    } else
+    {
+        foreach ($data as $f)
+        {
 
             $sql = "SELECT * FROM $table
 					WHERE uuid = '$varkey' AND field = '$f'";
             $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
             $row = mysql_fetch_assoc($result);
-            if (empty($row)) {
+            if (empty($row))
+            {
                 $row['value'] = "NO_DATA";
             }
-            if ($varverb) {
+            if ($varverb)
+            {
                 $return[] = $f;
             }
             $return[] = $row['value'];
         }
     }
-    if (count($return) < 1) {
+    if (count($return) < 1)
+    {
         return "NO_DATA";
-    } else {
+    } else
+    {
         //returns a string that is "glued" togather by $varsep
         return implode($varsep, $return);
     }
@@ -102,41 +153,52 @@ function retrieve_values($table, $varkey, $data, $varverb, $varsep) {
 // $varverb = output verbose text or not
 // $varsep  = value to put between outputed data
 //'ALL_DATA'
-function retrieve_fields($table, $varkey, $data, $varverb, $varsep) {
+function retrieve_fields($table, $varkey, $data, $varverb, $varsep)
+{
     $return = array();
 
-    if (in_array('ALL_DATA', $data)) {
+    if (in_array('ALL_DATA', $data))
+    {
         $sql = "SELECT * FROM $table
 				WHERE uuid = '$varkey'";
         $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
-        while ($row = mysql_fetch_assoc($result)) {
-            if ($row['field'] == '') {
+        while ($row = mysql_fetch_assoc($result))
+        {
+            if ($row['field'] == '')
+            {
                 $row['field'] = 'NO_DATA';
             }
-            if ($varverb) {
+            if ($varverb)
+            {
                 $return[] = $row['value'];
             }
             $return[] = $row['field'];
         }
-    } else {
-        foreach ($data as $f) {
+    } else
+    {
+        foreach ($data as $f)
+        {
 
             $sql = "SELECT * FROM $table
 					WHERE uuid = '$varkey' AND value = '$f'";
             $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
             $row = mysql_fetch_assoc($result);
-            if (empty($row)) {
+            if (empty($row))
+            {
                 $row['field'] = "NO_DATA";
             }
-            if ($varverb) {
+            if ($varverb)
+            {
                 $return[] = $f;
             }
             $return[] = $row['field'];
         }
     }
-    if (count($return) < 1) {
+    if (count($return) < 1)
+    {
         return "NO_DATA";
-    } else {
+    } else
+    {
         return implode($varsep, $return);
     }
 }
@@ -146,22 +208,27 @@ function retrieve_fields($table, $varkey, $data, $varverb, $varsep) {
 // $varkey  = owner's UUID
 // $data    = array of values //'ALL_DATA'
 // $varverb = output verbose text or not
-function delete_values($table, $varkey, $data, $varverb) {
+function delete_values($table, $varkey, $data, $varverb)
+{
     $rows;
-    if (in_array('ALL_DATA', $data)) {
+    if (in_array('ALL_DATA', $data))
+    {
         $sql = "DELETE FROM $table
 				WHERE uuid = '$varkey'";
         $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
         $rows += mysql_affected_rows();
-    } else {
-        foreach ($data as $f) {
+    } else
+    {
+        foreach ($data as $f)
+        {
             $sql = "DELETE FROM $table
 					WHERE uuid = '$varkey' AND field = '$f'";
             $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
             $rows += mysql_affected_rows();
         }
     }
-    if ($varverb == true) {
+    if ($varverb == true)
+    {
         return "SUCCESS: DELETED " . $rows . " RECORDS.";
     }
     else
@@ -174,30 +241,37 @@ function delete_values($table, $varkey, $data, $varverb) {
 // $data    = array of fields //'ALL_DATA'
 // $varverb = output verbose text or not
 // $varsep  = value to put between outputed data
-function delete_fields($table, $varkey, $data, $varverb) {
+function delete_fields($table, $varkey, $data, $varverb)
+{
     $rows;
-    if (in_array('ALL_DATA', $data)) {
+    if (in_array('ALL_DATA', $data))
+    {
         $sql = "DELETE FROM $table
 				WHERE uuid = '$varkey'";
         $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
         $rows += mysql_affected_rows();
-    } else {
-        foreach ($data as $f) {
+    } else
+    {
+        foreach ($data as $f)
+        {
             $sql = "DELETE FROM $table
 					WHERE uuid = '$varkey' AND value = '$f'";
             $result = mysql_query($sql) or die("ERROR: SYNTAX " . mysql_error());
             $rows += mysql_affected_rows();
         }
     }
-    if ($varverb == true) {
+    if ($varverb == true)
+    {
         return "SUCCESS: DELETED " . $rows . " RECORDS.";
     }
     else
         return "SUCCESS: " . $rows;
 }
 
-function authorized($userstable, $user, $pass) {
-    if ($user) { //if (the field has been filled)
+function authorized($userstable, $user, $pass)
+{
+    if ($user)
+    { //if (the field has been filled)
 // username and password sent from form
         $myusername = $user;
         $mypassword = $pass;
@@ -213,9 +287,11 @@ function authorized($userstable, $user, $pass) {
 
 // If result matched $myusername and $mypassword,
 // one row would have been returned
-        if (mysql_num_rows($result) == 1) {
+        if (mysql_num_rows($result) == 1)
+        {
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
@@ -223,27 +299,33 @@ function authorized($userstable, $user, $pass) {
 
 //do an authorization based on key rather than username
 //pass is the data_pass
-function authKey($usertable, $uuid, $pass) {
+function authKey($usertable, $uuid, $pass)
+{
     //echo "uuid: " . $uuid . " | pass:" . $pass;
-    if (empty($uuid) || $uuid == "" || $uuid == " " || $uuid == null) {
+    if (empty($uuid) || $uuid == "" || $uuid == " " || $uuid == null)
+    {
         die("1Authentication Failed");
     }
-    if (empty($pass) || $pass == "" || $pass == " " || $pass == null) {
+    if (empty($pass) || $pass == "" || $pass == " " || $pass == null)
+    {
         die("2Authentication Failed");
     }
     $getsql = "SELECT * FROM `" . $usertable . "` WHERE uuid='" . $uuid . "'";
     $getqry = mysql_query($getsql) or die(mysql_error());
-    while ($row = mysql_fetch_assoc($getqry)) {
+    while ($row = mysql_fetch_assoc($getqry))
+    {
         $curUUID = $row['uuid'];
         $currValue = $row['data_pass'];
 
         if ($curUUID == $uuid)
             break;
     }
-    if ($pass == $currValue) {
+    if ($pass == $currValue)
+    {
         //echo "Auth Success";
         return true; //Yea authorized :)
-    } else {
+    } else
+    {
         //return false;
         die("Authentication Failed");
     }

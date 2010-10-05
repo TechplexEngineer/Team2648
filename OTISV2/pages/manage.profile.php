@@ -1,10 +1,14 @@
 <?php
 session_start();
+
+//echo($_REQUEST['action']);
+
 if (empty($_SESSION['user']) && empty($_REQUEST['form'])) //check this code!!1
+
 {
     exit;
 }
-if (isset($_REQUEST['Submit']))
+if ($_REQUEST['action']=="submit")
 {
     //echo "Let's process this form!";
     include "config.php";
@@ -48,9 +52,57 @@ if (isset($_REQUEST['Submit']))
     }
     exit;
 }
-$sql = "SELECT * FROM `pending_profile` WHERE id ='" . $_SESSION['id'] . "'";
-$qry = mysql_query($sql) or die(mysql_error());
-$row = mysql_fetch_assoc($qry);
+else if($_REQUEST['action']=="change")
+{
+
+    //print_r($_REQUEST);
+
+    //Fill the fields below with previously submiotted data
+
+    $row['nickname']            = $_REQUEST['nickname'];
+    $row['location']            = $_REQUEST['town'];
+    $row['role']                = $_REQUEST['role'];
+    $row['yog']                 = $_REQUEST['yog'];
+    $row['interests']           = $_REQUEST['interests'];
+    $row['favMoment']           = $_REQUEST['fav_moment'];
+    $row['gainThisYr']          = $_REQUEST['gain'];
+    $row['futurePlans']         = $_REQUEST['future'];
+    $row['bio']                 = $_REQUEST['bio'];
+
+
+}
+else
+{
+    $sql = "SELECT * FROM `pending_profile` WHERE id ='" . $_SESSION['id'] . "'";
+    $qry = mysql_query($sql) or die(mysql_error());
+    $row = mysql_fetch_assoc($qry);
+
+    if(empty($row['nickname']))
+        $row['nickname'] = "[NONE]";
+
+    if(empty($row['location']))
+        $row['location'] = "Town";
+
+    if(empty($row['role']))
+        $row['role'] = "[NONE]";
+
+    if(empty($row['yog']))
+        $row['yog'] = "[NONE]";
+
+    if(empty($row['interests']))
+        $row['interests'] = "[NONE]";
+
+    if(empty($row['favMoment']))
+        $row['favmoment'] = "[NONE]";
+
+    if(empty($row['gainThisYr']))
+        $row['gainThisYr'] = "[NONE]";
+
+    if(empty($row['futurePlans']))
+        $row['futurePlans'] = "[NONE]";
+    if(empty($row['bio']))
+        $row['bio'] = "This is a Place for you to write whatever you want the world to know about yourself.";
+}
 ?>
 <!--<h3>Use this page to manage your profile information</h3>-->
 <h4>Public Profile</h4>
@@ -102,10 +154,11 @@ $row = mysql_fetch_assoc($qry);
         </tr>
     </table>
     * All fields are required.
-<?php
-include "disclaimer.php";
+    <?php
+    include "disclaimer.php";
 // @todo add js validation of all fields filled in
-?>
-    <br><input type="submit" name="Submit" value=" I Agree, Preview "/>
+    ?>
+    <br/>
+    <input type="submit" name="Submit" value=" I Agree, Preview "/>
 
 </form>
