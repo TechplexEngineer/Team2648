@@ -10,14 +10,16 @@ if($_REQUEST['action'] == "Submit")
     {
         die ("You author name must be longer than 3 characters.");
     }
+
+    $date = str_replace(",", "|", $_REQUEST['eventDate'], ",");
+    
     //$sql = "INSERT "
-    $sql = "INSERT INTO `tims`.`blog`"
-            . "(`timestamp`, `title`, `date`, `post`, `author`, `approved`) \n"
-            . "VALUES (timestamp = NOW(),
-            '" . mysql_real_escape_string($_REQUEST['title'])     . "',
-            '" . mysql_real_escape_string($_REQUEST['eventDate']) . "',
-            '" . mysql_real_escape_string($_REQUEST['TextArea1']) . "',
-            '" . mysql_real_escape_string($_REQUEST['author'])    . "', 'False')\n";
+    $sql = "INSERT INTO `tims`.`blog` ( `title`, `date`, `post`, `author`, `approved`) \n"
+			    . "VALUES (
+				    '" . mysql_real_escape_string($_REQUEST['title'])     . "',
+				    '" . mysql_real_escape_string($date) . "',
+				    '" . mysql_real_escape_string($_REQUEST['TextArea1']) . "',
+				    '" . mysql_real_escape_string($_REQUEST['author'])    . "', 'False')\n";
 
     //echo $sql;
     $qry = mysql_query($sql) or die(mysql_error());

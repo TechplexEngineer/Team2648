@@ -1,4 +1,5 @@
 <?php
+
 $dbhost = 'localhost';
 $dbuser = 'tims';
 $dbpass = 'timspass';
@@ -10,9 +11,24 @@ mysql_select_db($dbname) or die('ERROR: CANNOT SELECT DATABASE. \n' . mysql_erro
 
 $sql = "SELECT * FROM `blog`";
 $qry = mysql_query($sql) or die(mysql_error());
-$row = mysql_fetch_assoc($qry);
+while ($row = mysql_fetch_assoc($qry))
+{
+    if(!$row['approved'])
+    {
+	echo "<div>\n";
+	echo "<h5>". str_replace('|', ',', $row['date']) ."</h5>\n";
+	echo "<hr>\n";
+	echo "<h3>". $row['title'] ."</h3>\n";
+	echo $row['post']."\n";
+	echo "Posted By: " . $row['author'] ."\n";
 
-print_r($row);
+	echo "</div>\n";
+
+	//print_r($row);
+	
+
+    }
+}
+
 //echo "test";
-
 ?>
