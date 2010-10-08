@@ -1,7 +1,7 @@
 
 <?php
 
-function lookUpName($id)
+function lookUpName($id) //ID 2 NAME
 {
 	include "vars.php";
 	$sql = "SELECT * FROM ".$login_table." where id = '". $id ."'";
@@ -25,4 +25,8 @@ function getLastName($id)
 	$row = mysql_fetch_assoc($qry);
 	return $row['lastname'];
 }
+//ID2MAIL
+//ID2HOURS
+//
+
 ?>

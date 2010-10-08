@@ -11,7 +11,7 @@ if($_REQUEST['action'] == "Submit")
         die ("You author name must be longer than 3 characters.");
     }
 
-    $date = str_replace(",", "|", $_REQUEST['eventDate'], ",");
+    //$date = str_replace(",", "|", $_REQUEST['eventDate'], ",");
     
     //$sql = "INSERT "
     $sql = "INSERT INTO `tims`.`blog` ( `title`, `date`, `post`, `author`, `approved`) \n"
@@ -59,10 +59,10 @@ else
             theme_advanced_toolbar_location : "top",
             theme_advanced_toolbar_align : "left",
             theme_advanced_statusbar_location : "bottom",
-            theme_advanced_resizing : true
+            theme_advanced_resizing : true,
 
             // Example content CSS (should be your site CSS)
-            //        content_css : "css/styling.css"
+                    content_css : "http://team2648.com/sites/team2648.com/themes/zen_midnight/zen_midnight.css"
         });
     });
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>jQuery UI Autocomplete - Multiple values</title>
+        <link rel="stylesheet" href="../css/jq/jquery.ui.all.css">
+        <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+        <script type="text/javascript" src="../js/ui/jquery.ui.core.js"></script>
+        <script type="text/javascript" src="../js/ui/jquery.ui.widget.js"></script>
+        <script type="text/javascript" src="../js/ui/jquery.ui.position.js"></script>
+        <script type="text/javascript" src="../js/ui/jquery.ui.autocomplete.js"></script>
+        <link rel="stylesheet" href="../css/demos.css">
+        <script type="text/javascript">
+            $(function() {
+		
+                $.get("http://team2648.com/OTIS2/admin/contacts.php", function(data){
+                    availableTags = data.split("/");
+                });
+
+                function split( val ) {
+                    return val.split( /,\s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+
+                $( "#tags" ).autocomplete({
+                    minLength: 0,
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                        availableTags, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        //alert("Junk");
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
+                });
+                /*$( "#tags" ).click(function(){
+                    alert("Clicked");
+                    $( "#tags" ).attr()
+                    $( "#tags" ).attr()
+
+
+                });
+                $( "#tags" ).blur(function(){
+                    alert("Small");
+                    $( "#tags" ).attr()
+                    $( "#tags" ).attr()
+
+                });*/
+            });
+        </script>
+    </head>
+    <body>
+
+        <div class="demo">
+
+            <div class="ui-widget">
+                <label for="tags">Email addresses: </label>
+                <textarea id="tags" cols="50" rows="2"></textarea>
+            </div>
+
+        </div><!-- End demo -->
+
+
+    </body>
+</html>

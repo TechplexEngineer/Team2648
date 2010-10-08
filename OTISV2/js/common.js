@@ -121,18 +121,27 @@ function showMail()
 {
     makeVisID("mail");
     makeNotVisID("text");
+    showSubmit();
 }
 
 function showText()
 {
     makeVisID("text");
     makeNotVisID("mail");
+    showSubmit();
 }
 
 function showBoth()
 {
     makeVisID("text");
     makeVisID("mail");
+    showSubmit();
+}
+
+function showSubmit()
+{
+    console.log("Test");
+    $("#sendButton").css({'display':'inline'});
 }
 
 function makeVisID(divID) {

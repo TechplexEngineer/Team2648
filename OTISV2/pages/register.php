@@ -88,6 +88,12 @@ if (!empty($_REQUEST['fname']))//The form has been submitted
 
 echo "<h3>Register yourself here</h3>";
 ?>
+
+<script src="js/jquery.validationEngine-en.js" type="text/javascript"></script>
+	<script src="js/jquery.validationEngine.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" media="screen" charset="utf-8" />
+
+
 <strong> NOTE: </strong> This site's advanced features do not work in Internet Explorer. <br/>
 
 <script>
@@ -143,5 +149,5 @@ echo "<h3>Register yourself here</h3>";
         </tr>
     </table>
     <?php include "disclaimer.php"; ?>
-    <br><input type="submit" id="submit" name="Submit" value="I Agree, Create My account">
+    <br><input type="submit" id="submit" name="Submit" value="I Agree, Create My account"/>
 </form>
