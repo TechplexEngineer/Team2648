@@ -13,7 +13,11 @@ if (!empty($_GET['name']))
         $row = getRow($_GET['name']);
         //die($row);
         if($row == "error")
-            die("User Missing From Database");
+	{
+	    include "mail.php";
+	    mailer("blake@team2648.com", "User Missing From Database Error", $_GET['name']."'s hours is not loading please check into that.");
+            die("Sorry, Your stats couldn't be loaded.");
+	}
             //@todo sned message to blake
             //@todo account approval
             //die("robert");

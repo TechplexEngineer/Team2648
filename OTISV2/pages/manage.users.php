@@ -16,6 +16,7 @@ echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('fl'
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('ln');\"                        /> Lastname \n";
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('fn');\"                        /> Firstname \n";
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('em');\" checked=\"checked\"    /> Email \n";
+echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('sms');\"			    /> SMS \n";
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('ty');\"                        /> Type \n";
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('hp');\"                        /> Homephone \n";
 echo "<input type=\"checkbox\" name=\"todo\" value=\"\" onclick=\"toggleVis('cp');\" checked=\"checked\"    /> Cellphone \n";
@@ -29,6 +30,7 @@ echo "<th class=\"fl\"> <strong> First Last</strong>    </th>\n";
 echo "<th class=\"ln\"> <strong> Last Name</strong>     </th>\n";
 echo "<th class=\"fn\"> <strong> First Name</strong>    </th>\n";
 echo "<th class=\"em\"> <strong> Email</strong>         </th>\n";
+echo "<th class=\"sms\"> <strong> SMS</strong>		</th>\n";
 echo "<th class=\"ty\"> <strong> Type</strong>          </th>\n";
 echo "<th class=\"hp\"> <strong> HomePhone</strong>     </th>\n";
 echo "<th class=\"cp\"> <strong> CellPhone</strong>     </th>\n";
@@ -44,6 +46,7 @@ while ($row = mysql_fetch_assoc($qry))
     echo "<td style=\"padding:0 5px 0 5px;\" class=\"ln\"> " . $row["lastname"] . "</td>\n";
     echo "<td style=\"padding:0 5px 0 5px;\" class=\"fn\"> " . $row["firstname"] . "</td>\n";
     echo "<td style=\"padding:0 5px 0 5px;\" class=\"em\"> " . $row["email"] . "</td>\n";
+    echo "<td style=\"padding:0 5px 0 5px;\" class=\"sms\"> " . $row["sms"] . "</td>\n";
     echo "<td style=\"padding:0 5px 0 5px;\" class=\"ty\"> " . $row["type"] . "</td>\n";
     echo "<td style=\"padding:0 5px 0 5px;\" class=\"hp\"> " . $row["homephone"] . "</td>\n";
 

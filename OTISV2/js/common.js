@@ -140,7 +140,6 @@ function showBoth()
 
 function showSubmit()
 {
-    console.log("Test");
     $("#sendButton").css({'display':'inline'});
 }
 

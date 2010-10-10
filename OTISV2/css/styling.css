@@ -146,6 +146,7 @@ display: none;
 .ln{display: none;}
 .fn{display: none;} 
 .em{display: table-cell;}
+.sms{display: none;}
 .ty{display: none;}
 .hp{display: none;}
 .cp{display: table-cell;}

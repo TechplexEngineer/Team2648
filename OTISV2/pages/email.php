@@ -1,7 +1,33 @@
 <?php
-if(isset($_REQUEST['To']))
+
+if (isset($_REQUEST['todo']))
 {
-    print_r($_REQUEST);
+    //print_r($_REQUEST);
+    //exit;
+    if ($_REQUEST['todo'] == "Send an email")
+	$addresses = explode(", ", $_REQUEST['To']);
+    else if ($_REQUEST['todo'] == "Send a text message")
+	$addresses = explode(", ", $_REQUEST['ToText']);
+    else if ($_REQUEST['todo'] == "Send both")
+    {
+	$addresses = explode(", ", $_REQUEST['ToText']);
+	$addresses = explode(", ", $_REQUEST['ToText']);
+    }
+    else
+	die("There has been an erro");
+    //print_r($addresses);
+
+    include "functions.php";
+    $addresses = removeBlankEntries($addresses);
+
+    include "mail.php";
+    	$to = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
+	$subject = $_REQUEST['Subject'];
+	$body = $_REQUEST['Message'];
+    mutlipleMailer(arrayofaddresses, to,subj, body);
+
+    echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
+
 
 
 
@@ -22,12 +48,12 @@ if(isset($_REQUEST['To']))
 <script type="text/javascript" src="js/ui/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="js/ui/jquery.ui.position.js"></script>
 <script type="text/javascript" src="js/ui/jquery.ui.autocomplete.js"></script>
-<link rel="stylesheet" href="css/demos.css">
+<!--<link rel="stylesheet" href="css/demos.css">-->
 <script type="text/javascript">
     $(function() {
 
         $.get("http://team2648.com/OTIS2/admin/contacts.php", function(data){
-            availableTags = data.split("/");
+            emailaddresses = data.split("/");
         });
 
         function split( val ) {
@@ -37,12 +63,40 @@ if(isset($_REQUEST['To']))
             return split( term ).pop();
         }
 
-        $( "#tags" ).autocomplete({
+        $( "#emailto" ).autocomplete({
             minLength: 0,
             source: function( request, response ) {
                 // delegate back to autocomplete, but extract the last term
                 response( $.ui.autocomplete.filter(
-                availableTags, extractLast( request.term ) ) );
+                emailaddresses, extractLast( request.term ) ) );
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                //alert("Junk");
+                return false;
+            },
+            select: function( event, ui ) {
+                var terms = split( this.value );
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push( ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                terms.push( "" );
+                this.value = terms.join( ", " );
+                return false;
+            }
+        });
+
+	$.get("http://team2648.com/OTIS2/admin/contacts.php",{ action: "sms"}, function(data){
+            smsaddresses = data.split("/");
+        });
+	$( "#smsto" ).autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                // delegate back to autocomplete, but extract the last term
+                response( $.ui.autocomplete.filter(
+                smsaddresses, extractLast( request.term ) ) );
             },
             focus: function() {
                 // prevent value inserted on focus
@@ -76,30 +130,30 @@ if(isset($_REQUEST['To']))
         });*/
     });
 </script>
-
-<div id="send">
-    What would you like to do?
-    <br/>
-    <input id="r1" type="radio" name="todo" value="Send an email" onclick="showMail();" /> Send an email
-    <br/>
-    <input id="r2" type="radio" name="todo" value="Send a text message" onclick="showText();" /> Send a text message
-    <br/>
-    <input id="r3" type="radio" name="todo" value="Send both" onclick="showBoth();" /> Send both
-    <br/>
-</div>
-
 <form action="pages/email.php">
+    <div id="send">
+	What would you like to do?
+	<br/>
+	<input id="r1" type="radio" name="todo" value="Send an email" onclick="showMail();" /> Send an email
+	<br/>
+	<input id="r2" type="radio" name="todo" value="Send a text message" onclick="showText();;" /> Send a text message
+	<br/>
+	<input id="r3" type="radio" name="todo" value="Send both" onclick="showBoth();" /> Send both
+	<br/>
+    </div>
     <div id="mail"><!--  class="ui-widget"-->
-        <strong>Mail</strong>
+	<hr />
+        <strong>Email</strong>
         <br>
+
         <table width="100%">
             <tr>
                 <td style="vertical-align:top;">To</td>
-                <td><textarea name="To" id="tags" cols="75" rows="2"></textarea></td>
+                <td><textarea name="To" id="emailto" cols="75" rows="2"></textarea></td>
             </tr>
             <tr>
                 <td>Subject</td>
-                <td><input type="textbox" name="Subject" /></td>
+                <td><input type="textbox" name="Subject" size="72"/></td>
             </tr>
             <tr>
                 <td style="vertical-align:top;">Message</td>
@@ -107,20 +161,58 @@ if(isset($_REQUEST['To']))
             </tr>
         </table>
     </div>
-
-    <div id="text">
-	Text 
-        <br>
-        <textarea> lol </textarea>limit to 160 chars
-    </div>
     <script type="text/javascript">
-        //if($("#r1").val() || $("#r1").val() || $("#r1").val())
-        //console.log($('input[name=todo]:checked').val());
+	//if($("#r1").val() || $("#r1").val() || $("#r1").val())
+	//console.log($('input[name=todo]:checked').val());
+	//	console.log("junk");
+	//	$("#MessageText").keyup(function() {
+	//	    console.log("test");
+	//	    var text = $('textarea#MessageText').val();
+	//	    console.log(text.length);
+	//	});
+	var text = $("textarea#MessageText").val();
+	console.log(text);
 
+	function limit(id, length)
+	{
+	    console.log(id + " " + length);
+	}
 
+	//enter at least 15 characters
+	//14 more to go ...
+	//145 characters left
     </script>
+    <div id="text">
+	<hr />
+	<strong>Text</strong>
+        <br>
+
+        <table width="100%">
+            <tr>
+                <td style="vertical-align:top;">To</td>
+                <td><textarea name="ToText" id="smsto" cols="75" rows="2"></textarea></td>
+            </tr>
+            <tr>
+                <td>Subject</td>
+                <td><input type="textbox" name="SubjectText" size="72"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top;">Message</td>
+                <td><textarea name="MessageText" id="MessageText" cols="75" rows="15"> lol </textarea></td>
+            </tr>
+        </table>
+	limit to 160 chars
+    </div>
+
 
     <div id="sendButton">
+	<script type="text/javascript">
+	    function which()
+	    {
+		var which = $('input:radio[name=todo]:checked').val();
+		document.write("<input type=\"hidden\" name=\"which\" value=\"  "+which+" \"/>");
+	    }
+	</script>
         <input type="submit" id="send" name="Send" value="Send" />
     </div>
 </form>
@@ -129,7 +221,6 @@ if(isset($_REQUEST['To']))
 <?php
 
 //@todo hide options on beginning typing
-
 //include "io.php";
 //include "lookup.php";
 //echo "lookupname: " .lookUpName(1);
@@ -137,12 +228,10 @@ if(isset($_REQUEST['To']))
 
 
 /*
-echo "What would you like to do?";
-echo "<br/> \n";
-echo 
-echo "Send an email";
-echo "<br/> \n";
-echo "Send a text message";*/
-
-
+  echo "What would you like to do?";
+  echo "<br/> \n";
+  echo
+  echo "Send an email";
+  echo "<br/> \n";
+  echo "Send a text message"; */
 ?>
