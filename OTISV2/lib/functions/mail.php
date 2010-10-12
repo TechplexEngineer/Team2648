@@ -18,7 +18,8 @@ function mailer($to, $subject, $body)
 
 function mutlipleMailer($addresses, $subject, $body)
 {
-    foreach ($addresses as $num => $addy)
+    //include "functions.php";
+    foreach (removeBlankEntries($addresses) as $num => $addy)
     {
 
         mailer($addy, $subject, $body);
@@ -29,7 +30,7 @@ function chopmail($array)
     $newArray = array();
     foreach ($array as $num => $addy)
     {
-        $newArray .= substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
+        $newArray[] = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
     }
     return $newArray;
 }

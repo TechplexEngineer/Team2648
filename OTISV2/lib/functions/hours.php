@@ -1,5 +1,5 @@
 <?php
-
+//for loops thtough the cells in sheet 1 to find the given name
 function getCol($name)
 {
     $r = 1;
@@ -18,6 +18,8 @@ function getCol($name)
     return $c;
 }
 
+// for loops thtough the rows in sheet 1 to find the given name
+//
 function getRow($name)
 {
     $r=2;
@@ -37,12 +39,14 @@ function getRow($name)
     
 }
 
-function getCell($r, $c, $sheet)
+//Does exactly what it says,
+//Gets the cell specified from sheet num
+function getCell($r, $c, $sheetnum)
 {
     include "vars.php";
     $baseurl = "http://spreadsheets.google.com/feeds/cells/";
     $spreadsheet = $ssid . "/";
-    $sheetID = $sheet . "/";
+    $sheetID = $sheetnum . "/";
     $vis = "public/";
     $proj = "basic/";
 //$cell = "R3C2";

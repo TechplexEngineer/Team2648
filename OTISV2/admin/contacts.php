@@ -12,7 +12,7 @@ if (isset($_REQUEST['action']))
     $qry = mysql_query($sql) or die(mysql_error());
     while ($row = mysql_fetch_assoc($qry))
     {
-	echo $row['firstname'] . " " . $row['lastname'] . " <" . $row['sms'] . ">/ \n";
+	echo $row['firstname'] . " " . $row['lastname'] . " <" . $row['sms'] . ">/ ";
     }
     exit;
 }
@@ -23,7 +23,7 @@ $qry = mysql_query($sql) or die(mysql_error());
 
 while ($row = mysql_fetch_assoc($qry))
 {
-    echo $row['firstname'] . " " . $row['lastname'] . " <" . $row['email'] . ">/ \n";
+    echo $row['firstname'] . " " . $row['lastname'] . " <" . $row['email'] . ">/ ";
 }
 
 $sql = "SELECT * FROM MailingListMember";
@@ -32,6 +32,6 @@ $qry = mysql_query($sql) or die(mysql_error());
 
 while ($row = mysql_fetch_assoc($qry))
 {
-    echo $row['name'] . " <" . $row['email'] . ">/\n";
+    echo $row['name'] . " <" . $row['email'] . ">/";
 }
 ?>

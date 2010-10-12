@@ -15,7 +15,7 @@ if (!empty($_GET['name']))
         if($row == "error")
 	{
 	    include "mail.php";
-	    mailer("blake@team2648.com", "User Missing From Database Error", $_GET['name']."'s hours are not loading please check into that.");
+	    mailer("blake@team2648.com", "User Missing From Database Error", $_GET['name']."'s hours is not loading please check into that.");
             die("Sorry, Your stats couldn't be loaded.");
 	}
             //@todo sned message to blake
@@ -25,9 +25,9 @@ if (!empty($_GET['name']))
         // then get cell from each of the sheets for that user,
         // assuming they are in the same column of each sheet
         $s1 = getcell($row, 2, 1);
-        $s2 = getcell($row, 3, 1);
-        $s3 = getcell($row, 4, 1);
-        $s4 = getcell($row, 5, 1);
+        $s2 = getcell($row, 2, 2);
+        $s3 = getcell($row, 2, 3);
+        $s4 = getcell($row, 2, 4);
         // Store my loot in the session varibles,
         // so next time I want this, I don't need to fetch it
         $_SESSION['fhrs'] = $s1;

@@ -4,7 +4,7 @@ if (isset($_REQUEST['todo']))
 {
 
     //print_r($_REQUEST);
-    exit;
+    //exit;
     include "mail.php";
     include "functions.php";
 
@@ -12,22 +12,22 @@ if (isset($_REQUEST['todo']))
     {
         //if to subj messg empyu die
         $addresses = explode(", ", $_REQUEST['To']);
-        mutlipleMailer($addresses, $_REQUEST['Subject'], $_REQUEST['Message']);
+        mutlipleMailer(chopmail($addresses), $_REQUEST['Subject'], $_REQUEST['Message']);
     }
     else if ($_REQUEST['todo'] == "Send a text message")
     {
          //if totext subjtext messgtext empyu die
         $addresses = explode(", ", $_REQUEST['ToText']);
-        mutlipleMailer($addresses, $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+        mutlipleMailer(chopmail($addresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
     }
     else if ($_REQUEST['todo'] == "Send both")
     {
          //if to subj messg empyu die
          //if totext subjtext messgtext empyu die
         $Eaddresses = explode(", ", $_REQUEST['To']);
-        mutlipleMailer($Eaddresses, $_REQUEST['Subject'], $_REQUEST['Message']);
+        mutlipleMailer(chopmail($Eaddresses), $_REQUEST['Subject'], $_REQUEST['Message']);
         $Taddresses = explode(", ", $_REQUEST['ToText']);
-        mutlipleMailer($Taddresses, $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+        mutlipleMailer(chopmail($Taddresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
 
         exit;
     }
