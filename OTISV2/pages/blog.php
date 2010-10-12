@@ -10,8 +10,8 @@ if($_REQUEST['action'] == "Submit")
     {
         die ("You author name must be longer than 3 characters.");
     }
-
-    //$date = str_replace(",", "|", $_REQUEST['eventDate'], ",");
+    $var = $_REQUEST['eventDate'];
+    $date = str_replace(",", "|", $var);
     
     //$sql = "INSERT "
     $sql = "INSERT INTO `tims`.`blog` ( `title`, `date`, `post`, `author`, `approved`) \n"

@@ -12,17 +12,26 @@ function mailer($to, $subject, $body)
 {
     include "vars.php";
     $headers = "From: " . $shortname . "@team2648.com\r\n" .
-	    "X-Mailer: php";
+            "X-Mailer: php";
     return (mail($to, $subject, $body, $headers));
 }
 
-function mutlipleMailer($addresses, $to, $subject, $body)
+function mutlipleMailer($addresses, $subject, $body)
 {
     foreach ($addresses as $num => $addy)
     {
 
-	mailer($to, $subject, $body);
+        mailer($addy, $subject, $body);
     }
+}
+function chopmail($array)
+{
+    $newArray = array();
+    foreach ($array as $num => $addy)
+    {
+        $newArray .= substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
+    }
+    return $newArray;
 }
 
 //$to = "techwiz@techwizworld.net";

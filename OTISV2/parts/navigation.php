@@ -10,6 +10,7 @@
 	echo "<li><a href=\"?page=manage.profile\"> Profile</a></li>\n";
 	echo "<li><a href=\"?page=manage.info\"> Information</a></li>\n";
 	echo "<li><a href=\"?page=manage.econtact\"> Emergency Contact</a></li>\n";
+        echo "<li><a href=\"?page=blog\"> Blog </a></li>";
 	echo "</ul>\n";
     }
 

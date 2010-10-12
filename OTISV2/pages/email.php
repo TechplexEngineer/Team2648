@@ -2,29 +2,47 @@
 
 if (isset($_REQUEST['todo']))
 {
+
     //print_r($_REQUEST);
-    //exit;
+    exit;
+    include "mail.php";
+    include "functions.php";
+
     if ($_REQUEST['todo'] == "Send an email")
-	$addresses = explode(", ", $_REQUEST['To']);
+    {
+        //if to subj messg empyu die
+        $addresses = explode(", ", $_REQUEST['To']);
+        mutlipleMailer($addresses, $_REQUEST['Subject'], $_REQUEST['Message']);
+    }
     else if ($_REQUEST['todo'] == "Send a text message")
-	$addresses = explode(", ", $_REQUEST['ToText']);
+    {
+         //if totext subjtext messgtext empyu die
+        $addresses = explode(", ", $_REQUEST['ToText']);
+        mutlipleMailer($addresses, $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+    }
     else if ($_REQUEST['todo'] == "Send both")
     {
-	$addresses = explode(", ", $_REQUEST['ToText']);
-	$addresses = explode(", ", $_REQUEST['ToText']);
+         //if to subj messg empyu die
+         //if totext subjtext messgtext empyu die
+        $Eaddresses = explode(", ", $_REQUEST['To']);
+        mutlipleMailer($Eaddresses, $_REQUEST['Subject'], $_REQUEST['Message']);
+        $Taddresses = explode(", ", $_REQUEST['ToText']);
+        mutlipleMailer($Taddresses, $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+
+        exit;
     }
     else
-	die("There has been an erro");
+        die("There has been an error");
     //print_r($addresses);
 
-    include "functions.php";
-    $addresses = removeBlankEntries($addresses);
 
-    include "mail.php";
-    	$to = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
-	$subject = $_REQUEST['Subject'];
-	$body = $_REQUEST['Message'];
-    mutlipleMailer(arrayofaddresses, to,subj, body);
+    //$addresses = removeBlankEntries($addresses);
+
+
+//    $to = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
+//    $subject = $_REQUEST['Subject'];
+//    $body = $_REQUEST['Message'];
+//    mutlipleMailer(arrayofaddresses,  subj, body);
 
     echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
 
@@ -88,10 +106,10 @@ if (isset($_REQUEST['todo']))
             }
         });
 
-	$.get("http://team2648.com/OTIS2/admin/contacts.php",{ action: "sms"}, function(data){
+        $.get("http://team2648.com/OTIS2/admin/contacts.php",{ action: "sms"}, function(data){
             smsaddresses = data.split("/");
         });
-	$( "#smsto" ).autocomplete({
+        $( "#smsto" ).autocomplete({
             minLength: 0,
             source: function( request, response ) {
                 // delegate back to autocomplete, but extract the last term
@@ -133,16 +151,16 @@ if (isset($_REQUEST['todo']))
 <form action="pages/email.php">
     <div id="send">
 	What would you like to do?
-	<br/>
-	<input id="r1" type="radio" name="todo" value="Send an email" onclick="showMail();" /> Send an email
-	<br/>
-	<input id="r2" type="radio" name="todo" value="Send a text message" onclick="showText();;" /> Send a text message
-	<br/>
-	<input id="r3" type="radio" name="todo" value="Send both" onclick="showBoth();" /> Send both
-	<br/>
+        <br/>
+        <input id="r1" type="radio" name="todo" value="Send an email" onclick="showMail();" /> Send an email
+        <br/>
+        <input id="r2" type="radio" name="todo" value="Send a text message" onclick="showText();;" /> Send a text message
+        <br/>
+        <input id="r3" type="radio" name="todo" value="Send both" onclick="showBoth();" /> Send both
+        <br/>
     </div>
     <div id="mail"><!--  class="ui-widget"-->
-	<hr />
+        <hr />
         <strong>Email</strong>
         <br>
 
@@ -162,29 +180,29 @@ if (isset($_REQUEST['todo']))
         </table>
     </div>
     <script type="text/javascript">
-	//if($("#r1").val() || $("#r1").val() || $("#r1").val())
-	//console.log($('input[name=todo]:checked').val());
-	//	console.log("junk");
-	//	$("#MessageText").keyup(function() {
-	//	    console.log("test");
-	//	    var text = $('textarea#MessageText').val();
-	//	    console.log(text.length);
-	//	});
-	var text = $("textarea#MessageText").val();
-	console.log(text);
+        //if($("#r1").val() || $("#r1").val() || $("#r1").val())
+        //console.log($('input[name=todo]:checked').val());
+        //	console.log("junk");
+        //	$("#MessageText").keyup(function() {
+        //	    console.log("test");
+        //	    var text = $('textarea#MessageText').val();
+        //	    console.log(text.length);
+        //	});
+        var text = $("textarea#MessageText").val();
+        console.log(text);
 
-	function limit(id, length)
-	{
-	    console.log(id + " " + length);
-	}
+        function limit(id, length)
+        {
+            console.log(id + " " + length);
+        }
 
-	//enter at least 15 characters
-	//14 more to go ...
-	//145 characters left
+        //enter at least 15 characters
+        //14 more to go ...
+        //145 characters left
     </script>
     <div id="text">
-	<hr />
-	<strong>Text</strong>
+        <hr />
+        <strong>Text</strong>
         <br>
 
         <table width="100%">
@@ -206,13 +224,13 @@ if (isset($_REQUEST['todo']))
 
 
     <div id="sendButton">
-	<script type="text/javascript">
-	    function which()
-	    {
-		var which = $('input:radio[name=todo]:checked').val();
-		document.write("<input type=\"hidden\" name=\"which\" value=\"  "+which+" \"/>");
-	    }
-	</script>
+        <script type="text/javascript">
+            function which()
+            {
+                var which = $('input:radio[name=todo]:checked').val();
+                document.write("<input type=\"hidden\" name=\"which\" value=\"  "+which+" \"/>");
+            }
+        </script>
         <input type="submit" id="send" name="Send" value="Send" />
     </div>
 </form>
