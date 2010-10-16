@@ -3,54 +3,48 @@
 if (isset($_REQUEST['todo']))
 {
 
-    //print_r($_REQUEST);
+    print_r($_REQUEST);
     //exit;
     include "mail.php";
     include "functions.php";
 
+
+    echo ($_REQUEST['todo'] == "Send an email");
     if ($_REQUEST['todo'] == "Send an email")
     {
-        //if to subj messg empyu die
+        if(empty( $_REQUEST['To']) || empty($_REQUEST['Subject']) || empty($_REQUEST['Message']))
+            die("Empty");
         $addresses = explode(", ", $_REQUEST['To']);
         mutlipleMailer(chopmail($addresses), $_REQUEST['Subject'], $_REQUEST['Message']);
+              //$error = true;
     }
     else if ($_REQUEST['todo'] == "Send a text message")
     {
-         //if totext subjtext messgtext empyu die
+        if(empty( $_REQUEST['To']) || empty($_REQUEST['SubjectText']) || empty($_REQUEST['MessageText']))
+            die("Empty");
         $addresses = explode(", ", $_REQUEST['ToText']);
-        mutlipleMailer(chopmail($addresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+        if(!mutlipleMailer(chopmail($addresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']))
+              $error = true;
     }
     else if ($_REQUEST['todo'] == "Send both")
     {
-         //if to subj messg empyu die
-         //if totext subjtext messgtext empyu die
+        //if(empty($Eaddresses) || empty($_REQUEST['Subject']) || empty($_REQUEST['Message']) || empty($Taddresses) || empty($_REQUEST['SubjectText']) || empty($_REQUEST['MessageText']))
+            //die("Empty");
         $Eaddresses = explode(", ", $_REQUEST['To']);
-        mutlipleMailer(chopmail($Eaddresses), $_REQUEST['Subject'], $_REQUEST['Message']);
+        if(!mutlipleMailer(chopmail($Eaddresses), $_REQUEST['Subject'], $_REQUEST['Message']))
+              $error = true;
         $Taddresses = explode(", ", $_REQUEST['ToText']);
-        mutlipleMailer(chopmail($Taddresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
-
-        exit;
+        if(!mutlipleMailer(chopmail($Taddresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']))
+              $error = true;
     }
     else
-        die("There has been an error");
-    //print_r($addresses);
+        die("There has been an error(If Else)");
 
 
-    //$addresses = removeBlankEntries($addresses);
-
-
-//    $to = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
-//    $subject = $_REQUEST['Subject'];
-//    $body = $_REQUEST['Message'];
-//    mutlipleMailer(arrayofaddresses,  subj, body);
-
-    echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
-
-
-
-
-
-
+    if(!$error)
+        echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
+    else
+        echo "There has been an error.(error)";
     exit;
 }
 ?>
@@ -150,7 +144,7 @@ if (isset($_REQUEST['todo']))
 </script>
 <form action="pages/email.php">
     <div id="send">
-	What would you like to do?
+        What would you like to do?
         <br/>
         <input id="r1" type="radio" name="todo" value="Send an email" onclick="showMail();" /> Send an email
         <br/>
@@ -182,12 +176,12 @@ if (isset($_REQUEST['todo']))
     <script type="text/javascript">
         //if($("#r1").val() || $("#r1").val() || $("#r1").val())
         //console.log($('input[name=todo]:checked').val());
-        //	console.log("junk");
-        //	$("#MessageText").keyup(function() {
-        //	    console.log("test");
-        //	    var text = $('textarea#MessageText').val();
-        //	    console.log(text.length);
-        //	});
+        //      console.log("junk");
+        //      $("#MessageText").keyup(function() {
+        //          console.log("test");
+        //          var text = $('textarea#MessageText').val();
+        //          console.log(text.length);
+        //      });
         var text = $("textarea#MessageText").val();
         console.log(text);
 
@@ -219,7 +213,7 @@ if (isset($_REQUEST['todo']))
                 <td><textarea name="MessageText" id="MessageText" cols="75" rows="15"> lol </textarea></td>
             </tr>
         </table>
-	limit to 160 chars
+        limit to 160 chars
     </div>
 
 

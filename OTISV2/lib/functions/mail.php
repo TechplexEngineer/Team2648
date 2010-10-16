@@ -18,12 +18,13 @@ function mailer($to, $subject, $body)
 
 function mutlipleMailer($addresses, $subject, $body)
 {
-    //include "functions.php";
+    $error = false;
     foreach (removeBlankEntries($addresses) as $num => $addy)
     {
-
-        mailer($addy, $subject, $body);
+        if(!mailer($addy, $subject, $body))
+            $error = true;
     }
+    return $error;
 }
 function chopmail($array)
 {
