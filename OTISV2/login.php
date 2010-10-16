@@ -33,11 +33,6 @@ if ($loginsDisabled)
 }
 
 
-
-
-
-
-
 if (isset($myusername) && authorized($login_table, $myusername, $mypassword))
 { // authorize function defined in functions.php
     

@@ -15,6 +15,7 @@ if (isset($_REQUEST['todo']))
         if(empty( $_REQUEST['To']) || empty($_REQUEST['Subject']) || empty($_REQUEST['Message']))
             die("Empty");
         $addresses = explode(", ", $_REQUEST['To']);
+	if(isset($addresses))
         mutlipleMailer(chopmail($addresses), $_REQUEST['Subject'], $_REQUEST['Message']);
               //$error = true;
     }
@@ -23,28 +24,42 @@ if (isset($_REQUEST['todo']))
         if(empty( $_REQUEST['To']) || empty($_REQUEST['SubjectText']) || empty($_REQUEST['MessageText']))
             die("Empty");
         $addresses = explode(", ", $_REQUEST['ToText']);
-        if(!mutlipleMailer(chopmail($addresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']))
-              $error = true;
+	if(isset($addresses))
+        mutlipleMailer(chopmail($addresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
     }
     else if ($_REQUEST['todo'] == "Send both")
     {
         //if(empty($Eaddresses) || empty($_REQUEST['Subject']) || empty($_REQUEST['Message']) || empty($Taddresses) || empty($_REQUEST['SubjectText']) || empty($_REQUEST['MessageText']))
             //die("Empty");
         $Eaddresses = explode(", ", $_REQUEST['To']);
-        if(!mutlipleMailer(chopmail($Eaddresses), $_REQUEST['Subject'], $_REQUEST['Message']))
-              $error = true;
+	if(isset($Eaddresses))
+        mutlipleMailer(chopmail($Eaddresses), $_REQUEST['Subject'], $_REQUEST['Message']);
         $Taddresses = explode(", ", $_REQUEST['ToText']);
-        if(!mutlipleMailer(chopmail($Taddresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']))
-              $error = true;
+	if(isset($Taddresses))
+        mutlipleMailer(chopmail($Taddresses), $_REQUEST['SubjectText'], $_REQUEST['MessageText']);
+
+        exit;
     }
     else
         die("There has been an error(If Else)");
 
 
-    if(!$error)
-        echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
-    else
-        echo "There has been an error.(error)";
+    //$addresses = removeBlankEntries($addresses);
+
+
+//    $to = substr($addy, strpos($addy, "<") + 1, strpos($addy, ">") - strlen($addy));
+//    $subject = $_REQUEST['Subject'];
+//    $body = $_REQUEST['Message'];
+//    mutlipleMailer(arrayofaddresses,  subj, body);
+
+    //@todo error?
+    //echo "Mail Sent, Should there be a from list? jluce, OTIS, Blake?";
+
+
+
+
+
+
     exit;
 }
 ?>

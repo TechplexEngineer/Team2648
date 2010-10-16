@@ -8,7 +8,7 @@ include "config.php";
 
 if (isset($_REQUEST['action']))
 {
-    $sql = "SELECT firstname, lastname, sms FROM tims_users WHERE sms";
+    $sql = "SELECT firstname, lastname, sms FROM tims_users WHERE sms ORDER BY firstname, lastname DESC";
     $qry = mysql_query($sql) or die(mysql_error());
     while ($row = mysql_fetch_assoc($qry))
     {
@@ -17,7 +17,7 @@ if (isset($_REQUEST['action']))
     exit;
 }
 
-$sql = "SELECT * FROM tims_users";
+$sql = "SELECT * FROM tims_users ORDER BY firstname, lastname DESC";
 $qry = mysql_query($sql) or die(mysql_error());
 
 
@@ -26,7 +26,7 @@ while ($row = mysql_fetch_assoc($qry))
     echo $row['firstname'] . " " . $row['lastname'] . " <" . $row['email'] . ">/ ";
 }
 
-$sql = "SELECT * FROM MailingListMember";
+$sql = "SELECT * FROM MailingListMember ORDER BY firstname, lastname DESC";
 //echo $sql;
 $qry = mysql_query($sql) or die(mysql_error());
 
