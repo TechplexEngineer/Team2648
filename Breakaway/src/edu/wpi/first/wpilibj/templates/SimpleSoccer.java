@@ -23,11 +23,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.RobotDrive;*/
 public class SimpleSoccer extends SimpleRobot {
 
+    private Jaguar Rdrive, Ldrive;
     private RobotDrive drivetrain;
     private Joystick LS; //One Joystick controls the robot
     private Joystick RS; //controls camera
-    private Jaguar winch; // The winch that controls the lift
-    private Victor roller; // Controls the soccer balls to placement in front of kicker
+    private Victor winch; // The winch that controls the lift
+    private Jaguar roller; // Controls the soccer balls to placement in front of kicker
     private Victor kicker; // The kicker
     private Victor spinner; // The motor that releases the arm
     //private AxisCamera ac;
@@ -43,26 +44,31 @@ public class SimpleSoccer extends SimpleRobot {
     private String str1, str2, str3;
     private boolean driveCount = true;
     private Timer time;
+    private int slot = 6;
 
     public SimpleSoccer() {
+
         getWatchdog().setEnabled(false); // Stupid WATCHDOG
         dsLCD = DriverStationLCD.getInstance();
         ds = DriverStation.getInstance();
 
-        drivetrain = new RobotDrive(1, 2); // create RobotDrive
+
+        Rdrive = new Jaguar(slot,1);
+        Ldrive = new Jaguar(slot,2);
+        drivetrain = new RobotDrive(Rdrive, Ldrive); // create RobotDrive
         LS = new Joystick(1); // and joysticks
         RS = new Joystick(2);
 
-        liftDwn = new DigitalInput(14);
-        kickerReady = new DigitalInput(13);
-        switch1 = new DigitalInput(1);
-        switch2 = new DigitalInput(2);
-        haveBall = new DigitalInput(5);
+        liftDwn = new DigitalInput(slot,14);
+        kickerReady = new DigitalInput(slot,13);
+        switch1 = new DigitalInput(slot,1);
+        switch2 = new DigitalInput(slot,2);
+        haveBall = new DigitalInput(slot,5);
 
-        winch = new Jaguar(3); // and the winch
-        kicker = new Victor(5); // and the kicker
-        roller = new Victor(4); // aned the roller
-        spinner = new Victor(6); // aned the roller
+        winch = new Victor(slot,3); // and the winch
+        kicker = new Victor(slot,5); // and the kicker
+        roller = new Jaguar(slot,4); // aned the roller
+        spinner = new Victor(slot,6); // aned the roller
 
         gSensor = new Gyro(1);
 
@@ -231,14 +237,16 @@ public class SimpleSoccer extends SimpleRobot {
             //slow dwn he iterations, seems to work smoohely
             //Timer.delay(0.005);
 
-//            dsLCD.println(DriverStationLCD.Line.kUser4, 1, new Double(time.get()).toString());
+            dsLCD.println(DriverStationLCD.Line.kUser4, 1, new Double(time.get()).toString());
 //            dsLCD.println(DriverStationLCD.Line.kUser3, 1, new String("" + (time.get() > 90)));
-//            dsLCD.updateLCD();
+            dsLCD.updateLCD();
 
-            if (time.get() > 5)
+            if (time.get() > 85)
             {
                 ds.setDigitalOut(2, true);
             }
+            else
+                ds.setDigitalOut(2, false);
         }
 
         stop();
@@ -246,12 +254,12 @@ public class SimpleSoccer extends SimpleRobot {
 
     public void kick() {
         if (liftDwn.get()) {
-            kicker.set(.75);
+            kicker.set(1);
             //==================
             // This will allow for roller back speed
             // aka kicker distance
             //roller.set(-1);
-            //Timer.delay(.2);
+           Timer.delay(.05);
             //==================
 
             // disable kicking when travling over bump!!!!
@@ -274,7 +282,7 @@ public class SimpleSoccer extends SimpleRobot {
         } else {
             kicker.set(0);
             if (liftDwn.get()) {
-                roller.set(-.4);
+                roller.set(-.61);
             } else {
                 roller.set(0);
             }
@@ -294,7 +302,7 @@ public class SimpleSoccer extends SimpleRobot {
     }
 
     private void winchUpAndDown() {
-        if (RS.getRawButton(2)) {
+        if (RS.getRawButton(2) || RS.getRawButton(1)) {
             winch.set(-1);
         } else if (RS.getRawButton(3)) {
             spinner.set(-1);
