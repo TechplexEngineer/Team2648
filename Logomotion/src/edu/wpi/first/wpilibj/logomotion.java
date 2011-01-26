@@ -2,7 +2,7 @@
 /* Copyright (c) FIRST 2008. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.               
+/* the project.
 /*
  * Team 2648
  * Logomotion
@@ -23,8 +23,12 @@ public class logomotion extends SimpleRobot {
 	Jaguar r1, r2, l1, l2;
 	Joystick j1;
 	DigitalInput middle, right, left;
+	AnalogChannel light;
 	Encoder leftEncoder, rightEncoder;
 	DriverStation ds;
+	
+	DigitalModule four;
+	I2C ls;
 
 	public logomotion() {
 		getWatchdog().setEnabled(false);
@@ -39,10 +43,16 @@ public class logomotion extends SimpleRobot {
 		middle = new DigitalInput(1);//photoswitches
 		right = new DigitalInput(2);
 		left = new DigitalInput(3);
+		light = new AnalogChannel(1);
+
 
 		leftEncoder = new Encoder(8, 9);//Encoder
 		rightEncoder = new Encoder(6, 7);//Encoder
 		ds = DriverStation.getInstance();
+		four = new DigitalModule(4);
+		ls=new I2C(four,0);
+
+
 
 		//rtEn = new Encoder(4,5);
 
@@ -59,43 +69,60 @@ public class logomotion extends SimpleRobot {
 	 */
 	public void operatorControl() {
 		getWatchdog().setEnabled(false);
-		leftEncoder.reset();
-		rightEncoder.reset();
-		while (isOperatorControl()) {
+//		leftEncoder.reset();
+//		rightEncoder.reset();
+
+		while (isOperatorControl() )
+		{
+			System.out.println(light.getVoltage() + "\n");
+
+		
 			//System.out.println("junk");
 			//System.out.println(" rt: " + right.get() + " mid: " + middle.get() + " Lft: " + left.get()+"\n LeftE: "+leftEncoder.getDirection());
 			//System.out.println(leftEncoder.getRaw() + "");
 
 			leftEncoder.start();
 			rightEncoder.start();
+			byte[] byte1 = new byte[100];
+//			ls.read(0, 7,  byte1);
+//			//ls.read(1,8,int[])
+//
+//			for(int i= 0; i < 100; i++)
+//				System.out.println(byte1[i]);
 
 
 
 			//int REncoder = rtEn.get();
-			System.out.println("Left Endoder: " + leftEncoder.get());
-			System.out.println("Right Endoder: " + rightEncoder.get());
+			//System.out.println("Left Endoder: " + leftEncoder.get());
+			//System.out.println("Right Endoder: " + rightEncoder.get());
 
 
-			System.out.println("DigitalIn: " + !ds.getDigitalIn(1));
+			//System.out.println("DigitalIn: " + !ds.getDigitalIn(1));
 
+			boolean rt = right.get();//get Input from Photoswitches
+			boolean mid = middle.get();
+			boolean lft = left.get();
 
+			if (mid || lft || rt) {
+				ds.setDigitalOut(1, true);
+			} else {
+				ds.setDigitalOut(1, false);
+			}
 			if (!ds.getDigitalIn(1)) {
 
 				leftEncoder.reset();
 				rightEncoder.reset();
 
-				boolean rt = right.get();//get Input from Photoswitches
-				boolean mid = middle.get();
-				boolean lft = left.get();
-
-				if(mid && lft && rt) //@ y
+				if (mid && lft && rt) //@ y
 				{
 					drivetrain.setLeftRightMotorSpeeds(-.25, 0);
 					Timer.delay(.5);
-				}
-
-
-				else if (mid || lft || rt) {
+//					while(!(mid || lft || rt))
+//					{
+//						drivetrain.setLeftRightMotorSpeeds(-.25, 0);
+//						Timer.delay(.05);
+//					}
+				} else if (mid || lft || rt) {
 
 					if (lft) {
 						//
@@ -114,6 +141,8 @@ public class logomotion extends SimpleRobot {
 				drivetrain.arcadeDrive(j1);
 			}
 
+
+			
 
 			//			if (mid) {
 //				drivetrain.setLeftRightMotorSpeeds(-.25, -.25);
@@ -143,6 +172,5 @@ public class logomotion extends SimpleRobot {
 
 			//drivetrain.arcadeDrive(j1); //modifies the robotdrive controlls to a specific orentation
 		}
-
 	}
 }
