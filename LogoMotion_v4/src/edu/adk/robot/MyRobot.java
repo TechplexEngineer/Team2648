@@ -37,7 +37,7 @@ public class MyRobot extends SimpleRobot
 	Joystick js2 = new Joystick(2);
 	//define timers here:
 	Timer timer = new Timer();
-	DigitalInput tubeSaver = new DigitalInput(10);
+	DigitalInput tubeSaverLimitSw = new DigitalInput(10);
 
 	/**
 	 * RobotInit
@@ -175,6 +175,7 @@ public class MyRobot extends SimpleRobot
 		//ZJ
 		int arm_elbow_up = 5;
 		int arm_elbow_dwn = 3;
+
 		int claw_wrist_up = 6;
 		int claw_wrist_dwn = 4;
 
@@ -186,76 +187,135 @@ public class MyRobot extends SimpleRobot
 
 		int move_act = 11;
 
+		boolean a_elbow_up;
+		boolean a_elbow_dwn;
+
+		boolean c_wrist_up;
+		boolean c_wrist_dwn;
+
+		boolean c_spitter_in;
+		boolean c_spitter_out;
+
+		boolean c_spitter_rotate_up;
+		boolean c_spitter_rotate_dwn;
+
+		boolean haveTube;
+
+		boolean debug;
+
+		boolean p_low;
+		boolean p_mid;
+		boolean p_high;
+		boolean p_mod;
+
+		boolean act;
 
 
-		//ds.
+
+
+
 
 		while (isOperatorControl() && isEnabled())
 		{
+
+			a_elbow_up = js1.getRawButton(arm_elbow_up);
+			a_elbow_dwn = js1.getRawButton(arm_elbow_dwn);
+
+			c_wrist_up = js1.getRawButton(claw_wrist_up);
+			c_wrist_dwn = js1.getRawButton(claw_wrist_dwn);
+
+			c_spitter_in = js1.getRawButton(claw_spitter_in);
+			c_spitter_out = js1.getRawButton(claw_spitter_out);
+
+			if (js1.getRawAxis(6) > .25)
+			{
+				c_spitter_rotate_up = true;
+				c_spitter_rotate_dwn = false;
+			} else if (js1.getRawAxis(6) < .25)
+			{
+				c_spitter_rotate_dwn = true;
+				c_spitter_rotate_up = false;
+			} else
+			{
+				c_spitter_rotate_up = false;
+				c_spitter_rotate_dwn = false;
+			}
+
+			haveTube = !tubeSaverLimitSw.get();
+
+			debug = js1.getRawButton(10);
+
+			p_low = ds.getDigitalIn(5);
+			p_mid = ds.getDigitalIn(5) && ds.getDigitalIn(3);
+			p_high = ds.getDigitalIn(3);
+			p_mod = ds.getDigitalIn(2);
+
+
+			act = js1.getRawButton(move_act);
+
 			drive.run(js1.getX(), js1.getY());
 
-			dslcd.println(DriverStationLCD.Line.kMain6, 1, " Elbow Pos: " + arm.getPos());
-			dslcd.println(DriverStationLCD.Line.kUser2, 1, " Wrist Pos: " + claw.getPos());
 
-			dslcd.updateLCD();
 
-			if (js1.getRawButton(10))
+			//This is for debugging purposes.
+			if (debug)
 			{
 				arm.printPos();
 				claw.printPos();
+
+				dslcd.println(DriverStationLCD.Line.kMain6, 1, " Elbow Pos: " + arm.getPos());
+				dslcd.println(DriverStationLCD.Line.kUser2, 1, " Wrist Pos: " + claw.getPos());
+
+				dslcd.updateLCD();
 			}
 
-			if (js1.getRawButton(move_act))
+			//This should get the arm to the desired position as set by the
+			//switches that attach to the cypress board
+			if (act)
 			{
 
-				dwn = ds.getDigitalIn(5);
-				//tpl.io.d("Result of dwn: " + dwn);
-				up = ds.getDigitalIn(3);
-				//tpl.io.d("Result of up: " + up);
-				high = ds.getDigitalIn(2);
-				//tpl.io.d("Result of high: " + high);
-
-				String pos = "";
-				if (up == dwn)
-					//Move arm to mid
-					pos = "mid";
-				else if (up && !dwn)
-					//Move to pos top
-					pos = "top";
-				else if (!up && dwn)
-					//move to pos bot
-					pos = "bot";
+//				String pos = "";
+//				if (up == dwn)
+//					//Move arm to mid
+//					pos = "mid";
+//				else if (up && !dwn)
+//					//Move to pos top
+//					pos = "top";
+//				else if (!up && dwn)
+//					//move to pos bot
+//					pos = "bot";
 
 
-				double armPos = tpl.position.armGo(pos, high);
-				System.out.println("Moving Arm To:" + armPos);
-				while (js1.getRawButton(11) && !arm.at(armPos))
-				{
-					System.out.println("Moving Arm from " + arm.getPos());
-					arm.moveTo(armPos);
-					Timer.delay(.05);
-				}
-				// so now that the arm is in the correct position
-
-				//move the claw
-
-				double clawPos = tpl.position.clawGo(pos, high);
-				System.out.println("Moving Claw To:" + clawPos);
-				while (js1.getRawButton(move_act) && !claw.at(clawPos))
-				{
-					System.out.println("Moving Claw from " + claw.getPos());
-					claw.moveTo(clawPos);
-					Timer.delay(.05);
-				}
+//				double armPos = tpl.position.armGo(pos, high);
+//
+//				System.out.println("Moving Arm To:" + armPos);
+//				while (js1.getRawButton(11) && !arm.at(armPos))
+//				{
+//					System.out.println("Moving Arm from " + arm.getPos());
+//					arm.moveTo(armPos);
+//					Timer.delay(.05);
+//				}
+//				// so now that the arm is in the correct position
+//
+//				//move the claw
+//
+//				double clawPos = tpl.position.clawGo(pos, high);
+//				System.out.println("Moving Claw To:" + clawPos);
+//				while (js1.getRawButton(move_act) && !claw.at(clawPos))
+//				{
+//					System.out.println("Moving Claw from " + claw.getPos());
+//					claw.moveTo(clawPos);
+//					Timer.delay(.05);
+//				}
 
 				//Now that the claw is in the correct position, stop everything,
 				//and call the driver a dummie
-				arm.elbowRun(0);
-				claw.wristRun(0);
+//				arm.elbowRun(0);
+//				claw.wristRun(0);
 
 				while (js1.getRawButton(move_act))
 				{
-					System.out.println("Stop Pushing the button #11; Dummie!");
+					System.out.println("Stop Pushing the button Dummie!");
 					Timer.delay(.025);
 				}
 
@@ -264,18 +324,18 @@ public class MyRobot extends SimpleRobot
 			{
 				// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 				// Control the elbow
-				if (js1.getRawButton(arm_elbow_up))
+				if (a_elbow_up)
 					arm.elbowUp();
-				else if (js1.getRawButton(arm_elbow_dwn))
+				else if (a_elbow_dwn)
 					arm.elbowDwn();
 				else
-					arm.stop();
+					arm.elbowRun(0);
 
 				// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 				// Control the wrist
-				if (js1.getRawButton(claw_wrist_up))
+				if (c_wrist_up)
 					claw.wristUp();
-				else if (js1.getRawButton(claw_wrist_dwn))
+				else if (c_wrist_dwn)
 					claw.wristDwn();
 				else
 					claw.wristRun(0);
@@ -300,30 +360,17 @@ public class MyRobot extends SimpleRobot
 			 *
 			 */
 
-			if (!tubeSaver.get())
-			{
-				if (js1.getRawButton(claw_spitter_out))
-					claw.spitterOut();
-				else if (js1.getRawButton(claw_spitter_rotate_up))
-					claw.spitterRotateTubeUp();
-				else if (js1.getRawButton(claw_spitter_rotate_dwn))
-					claw.spitterRotateTubeDwn();
-				else
-					claw.spitterRun(0);
-			}
+			if (c_spitter_out)
+				claw.spitterOut();
+			else if (c_spitter_in && !haveTube)
+				claw.spitterIn();
+			else if (c_spitter_rotate_up)
+				claw.spitterRotateTubeUp();
+			else if (c_spitter_rotate_dwn)
+				claw.spitterRotateTubeDwn();
 			else
-			{
-				if (js1.getRawButton(claw_spitter_out))
-					claw.spitterOut();
-				else if (js1.getTrigger() || js1.getRawButton(claw_spitter_in))
-					claw.spitterIn();
-				else if (js1.getRawButton(claw_spitter_rotate_up))
-					claw.spitterRotateTubeUp();
-				else if (js1.getRawButton(claw_spitter_rotate_dwn))
-					claw.spitterRotateTubeDwn();
-				else
-					claw.spitterRun(0);
-			}
+				claw.spitterRun(0);
+
 
 			//junk
 			Timer.delay(0.005);

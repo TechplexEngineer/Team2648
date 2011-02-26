@@ -40,15 +40,24 @@ public class Drive implements Mechanism{
         drivetrain.arcadeDrive(y,x,false);
     }
 
-	public void runScaled(double y,double x){
-        drivetrain.arcadeDrive(y*1.5,x*1.5,false);
+	public void runScaled(double y,double x, double scale){
+        drivetrain.arcadeDrive(y*scale,x*scale,false);
     }
+
 	/**
 	 * Equivalent to arcade drive
 	 * @param j1 joystick in question
 	 */
 	public void run(Joystick j1){
         drivetrain.arcadeDrive(j1,false);
+	}
+	/**
+	 * uses the throttle to change the speed.
+	 * @param j1 the joystick to get the values from
+	 */
+	public void runScaled(Joystick j1){
+		double scale = (j1.getThrottle()+1) /2;
+        drivetrain.arcadeDrive(j1.getY()*scale,j1.getX()*scale,false);
 	}
 	/**
 	 * Equivalent to arcade drive
