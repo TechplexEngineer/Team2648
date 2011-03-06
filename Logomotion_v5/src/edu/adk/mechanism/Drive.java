@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Drive implements Mechanism{
     private static final double SPEED_STOP            =  0.0;
-    private static final double SPEED_FWD_MAX         =  1;
-    private static final double SPEED_REV_MAX         = -1;
+    private static final double SPEED_FWD_MAX         = -1;
+    private static final double SPEED_REV_MAX         = 1;
 
 	Jaguar  left_front	= new Jaguar(1);
 	Jaguar	left_rear	= new Jaguar(2);
@@ -36,7 +36,7 @@ public class Drive implements Mechanism{
 	 * @param y value from -1 to 1
 	 * @param x value from -1 to 1
 	 */
-    public void run(double y,double x){
+    public void run(double x,double y){
         drivetrain.arcadeDrive(y,x,false);
     }
 
@@ -46,6 +46,7 @@ public class Drive implements Mechanism{
 	public void run(Joystick j1, double scale){
 			this.run((j1.getX()/scale),(j1.getY()/scale));
 	}
+	
 
 	/**
 	 * Equivalent to arcade drive
@@ -58,9 +59,10 @@ public class Drive implements Mechanism{
 	 * uses the throttle to change the speed.
 	 * @param j1 the joystick to get the values from
 	 */
-	public void runScaled(Joystick j1){
-		double scale = ((j1.getThrottle()-1) /-2)+.05;
-		System.out.println(scale);
+	public void runThrottled(Joystick j1){
+		double scale = ((j1.getThrottle()-1) /-2)+.25;
+
+		//System.out.println(scale);
         drivetrain.arcadeDrive(j1.getY()*scale,j1.getX()*scale,false);
 	}
 	/**
@@ -98,6 +100,9 @@ public class Drive implements Mechanism{
 	 */
     public void goForward() {
         drivetrain.arcadeDrive(SPEED_FWD_MAX, SPEED_STOP, false);
+    }
+	public void goForwardSlow() {
+        drivetrain.arcadeDrive(SPEED_FWD_MAX/4, SPEED_STOP, false);
     }
 
 	/**
@@ -159,6 +164,11 @@ public class Drive implements Mechanism{
     public void goForwardRight() {
         drivetrain.arcadeDrive(SPEED_FWD_MAX, SPEED_REV_MAX, false);
     }
+
+	public void goBackwardSlow()
+	{
+		drivetrain.arcadeDrive(SPEED_REV_MAX/2, SPEED_STOP, false);
+	}
 
 
 }

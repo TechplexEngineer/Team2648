@@ -17,14 +17,17 @@ public class Cap extends Maneuver {
     
     public Cap(Arm arm, Maneuver pass, Maneuver fail, Maneuver timeout, double maxTime){
         super(pass,fail,timeout,maxTime);
+		System.out.println("CAP "+timeout);
         this.arm = arm;
     }
     
     protected void run() {
-        arm.elbowDwn();
+        arm.elbowUp();
+		System.out.println("up");
     }
 
     public void stop() {
+		arm.elbowRun(0);
     }
 
 }

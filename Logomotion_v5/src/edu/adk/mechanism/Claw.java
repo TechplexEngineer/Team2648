@@ -61,7 +61,7 @@ public class Claw implements Mechanism {
 	 */
 	public void wristUp()
 	{
-		wrist.set(.5);
+		wrist.set(.375);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class Claw implements Mechanism {
 	 */
 	public void wristDwn()
 	{
-		wrist.set(-.5);
+		wrist.set(-.375);
 	}
 
 // DUMB
@@ -117,8 +117,10 @@ public class Claw implements Mechanism {
 	 */
 	public void spitterIn(boolean haveTube) {
 		if(!haveTube)
-		vic_top.set(-1);
-		vic_bot.set(-1);
+		{
+			vic_top.set(-1);
+			vic_bot.set(-1);
+		}
 	}
 
 	/**
@@ -195,6 +197,7 @@ public class Claw implements Mechanism {
 		vic_bot.set(0);
 		wrist.set(0);
 	}
+
 
 // DEPRICATED
 //	public boolean moveToTop(boolean high) {

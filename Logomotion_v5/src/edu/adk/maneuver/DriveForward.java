@@ -16,11 +16,13 @@ public class DriveForward extends Maneuver{
     
     public DriveForward(Drive drive, Maneuver pass, Maneuver fail, Maneuver timeout, double maxTime){
         super(pass,fail,timeout,maxTime);
+		System.out.println("TimeoutDF: "+timeout);
         this.drive = drive;
     }
 
     protected void run() {
-        drive.goForward();
+        drive.goForwardSlow();
+		System.out.println("fwd");
     }
 
     public void stop() {

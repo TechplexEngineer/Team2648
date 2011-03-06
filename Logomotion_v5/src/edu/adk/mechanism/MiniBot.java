@@ -31,7 +31,7 @@ public class MiniBot implements Mechanism
 	public void deploy()
 	{
 		bot.set(1);
-		Timer.delay(.25);
+		Timer.delay(1.5);
 		bot.set(0);
 	}
 	/**
