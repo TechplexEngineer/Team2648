@@ -21,7 +21,7 @@ public class Drive implements Mechanism{
 
 	RobotDrive drivetrain = new RobotDrive(left_front, left_rear, right_front, right_rear);
 
-	Encoder left_encoder = new Encoder(3, 4);
+	Encoder left_encoder = new Encoder(8, 7);
 	Encoder right_encoder = new Encoder(5, 6);
 
     public void initialize(){
@@ -33,8 +33,8 @@ public class Drive implements Mechanism{
     }
     /**
 	 * Equivalent to arcade drive
-	 * @param y value from -1 to 1
-	 * @param x value from -1 to 1
+	 * @param R value from -1 to 1
+	 * @param L value from -1 to 1
 	 */
     public void run(double x,double y){
         drivetrain.arcadeDrive(y,x,false);
@@ -167,7 +167,12 @@ public class Drive implements Mechanism{
 
 	public void goBackwardSlow()
 	{
-		drivetrain.arcadeDrive(SPEED_REV_MAX/2, SPEED_STOP, false);
+		drivetrain.arcadeDrive(SPEED_REV_MAX/3, SPEED_STOP, false);
+	}
+
+	public void setLeftRightMotorSpeeds(double L, double R)
+	{
+		drivetrain.setLeftRightMotorSpeeds(L, R);
 	}
 
 

@@ -29,18 +29,22 @@ public class MyRobot extends SimpleRobot
 	DriverStation ds = DriverStation.getInstance();
 	DriverStationLCD dslcd = DriverStationLCD.getInstance();
 	//define maneuvers here
-	Maneuver driveF;
-	Maneuver driveB;
-	Maneuver cap;
-	Maneuver spitt;
-	Maneuver finish;
+//        Maneuver driveF;
+//        Maneuver driveB;
+//        Maneuver cap;
+//        Maneuver spitt;
+//        Maneuver finish;
 	//define joysticks here:
 	Joystick js1 = new Joystick(1);
 	Joystick js2 = new Joystick(2);
 	//define timers here:
 	Timer timer = new Timer();
 	DigitalInput haveTube = new DigitalInput(10);
+	DigitalInput p_mid = new DigitalInput(1);
+	DigitalInput p_lft = new DigitalInput(2);
+	DigitalInput p_rt = new DigitalInput(3);
 	double armGoTo, clawGoTo;
+	boolean mid, lft, rt;
 
 	/**
 	 * RobotInit
@@ -81,123 +85,191 @@ public class MyRobot extends SimpleRobot
 	public void autonomous()
 	{
 		initialize();
+		System.out.println("Entering Auto: ");
 
-//		Autonomous autonomous = null;
-//		//setup the autonomous twice to make sure everything gets initialized correctly
-//		for (int i = 0; i < 2; i++)
-//		{
+//                drive.goForwardSlow();
+//
+//                Timer.delay(5);
+//                arm.elbowUp();
+//
+//                Timer.delay(3.75);
+//                drive.stop();
+//                arm.elbowRun(0);
+//
+//                claw.wristRun(-.25);
+//                Timer.delay(.5);
+//                claw.wristRun(0);
 //
 //
-//			//---------AUTONOMOUS TREE--------------
-//			//CustomManeuver(mechanism1, mechanism2,...., passManeuver,failManeuver,timeoutManeuver,maxTime)
-//
-//			/**
-//			 * Drive Forward
-//			 *
-//			 * mechanisms: drive
-//			 * pass: null
-//			 * fail: null
-//			 * timeout: Cap
-//			 * time: 2
-//			 */
-//			driveF = new DriveForward(drive, null, null, cap, 2.0);
-//			/**
-//			 * Cap - Lower arm
-//			 *
-//			 * mechanisms: arm
-//			 * pass: null
-//			 * fail: null
-//			 * timeout: Finish
-//			 * time: 2
-//			 */
-//			cap = new Cap(arm, null, null, finish, 2.0);
+//                claw.spitterOut();
+//                Timer.delay(1);
 //
 //
-//			//spitt = new Spitt(claw, null, null, finish, 2.0);
-//			/**
-//			 * Finish
-//			 *
-//			 * mechanisms: drive
-//			 * pass:null
-//			 * finish:null
-//			 * timeout:null
-//			 * time: 2
-//			 */
-//			finish = new DriveBackward(drive, null, null, null, 2.0);
+//                arm.elbowDwn();
+//                Timer.delay(1);
+//                claw.spitterRun(0);
+//                Timer.delay(.35);
 //
-//			//initialize the autonomous with the root maneuver
-//			autonomous = new Autonomous(driveF);
-//		}
+//                arm.elbowRun(0);
 //
-//		//run the autonomous mode
-//		while (isAutonomous() && isEnabled() && autonomous != null)
-//		{
-//			autonomous.run();
-//			if (autonomous.finished)
-//				break;
-//			Timer.delay(0.005);
-//		}
-//		initialize();
-
-		drive.goForwardSlow();
-
-		Timer.delay(5);
-		arm.elbowUp();
-
-		Timer.delay(3.75);
-		drive.stop();
-		arm.elbowRun(0);
-
-		claw.wristRun(-.25);
-		Timer.delay(.5);
-		claw.wristRun(0);
-
-		//
-//		claw.spitterOut();
-//		Timer.delay(2);
-//		claw.spitterRun(0);
+//                //
+//                drive.goBackwardSlow();
+//                Timer.delay(1);
+//                drive.stop();
 //
-//		arm.elbowDwn();
-//		Timer.delay(.35);
-//		arm.elbowRun(0);
+//                arm.elbowDwn();
+//                Timer.delay(1.5);
+//                arm.elbowRun(0);
+//
+//
+//                drive.goRight();
+//                Timer.delay(1.5);
+//                drive.stop();
 
-		claw.spitterOut();
-		Timer.delay(1);
+		while (isAutonomous() && isEnabled())
+		{
+			Timer.delay(.05);
+			mid = p_mid.get();
+			lft = p_lft.get();
+			rt = p_rt.get();
+			System.out.println("Mid: "+mid + " | Lft: "+lft+ " | Rt: "+rt);
+			if (mid || lft || rt) //line following possible
+			{
+				if (mid && lft && rt) //@ T
+				{
+					//Backup from the T
+					drive.goBackwardSlow();
+					Timer.delay(1.25);
+					drive.stop();
+
+					//Raise Arm
+					arm.elbowUp();
+					Timer.delay(3.5);
+					arm.elbowRun(0);
+
+					//Go FWD
+					drive.goForwardSlow();
+					Timer.delay(.25);
+					drive.stop();
+
+					//Lower Wrist
+					claw.wristRun(-.25);
+					Timer.delay(.5);
+					claw.wristRun(0);
+
+					//Hang Tube
+					claw.spitterOut();
+					Timer.delay(2);
+					claw.spitterRun(0);
+
+					//Lower arm
+					arm.elbowDwn();
+					Timer.delay(1.5);
+					arm.elbowRun(0);
+
+					//Backup Slow
+					drive.goBackwardSlow();
+					Timer.delay(5);
+					drive.stop();
+
+					//Raise claw
+					claw.wristRun(.5);
+					Timer.delay(1);
+					claw.wristRun(0);
+
+					
+
+					//Turn arround -- Gyro Here
+					drive.goRight();
+					Timer.delay(1);
+					drive.stop();
 
 
-		arm.elbowDwn();
-		Timer.delay(1);
-		claw.spitterRun(0);
-		Timer.delay(.35);
-
-		arm.elbowRun(0);
-
-		//
-		drive.goBackwardSlow();
-		Timer.delay(1);
-		drive.stop();
-
-		arm.elbowDwn();
-		Timer.delay(1.5);
-		arm.elbowRun(0);
+					return;
 
 
-		drive.goRight();
-		Timer.delay(1.5);
-		drive.stop();
 
+				}
 
-		/*
-		 * First:  Drive line following until T
-		 *
-		 * Second: Backup ~ 4 feet
-		 *
-		 * Third:  Raise arm
-		 *
-		 * Fourth: Tilt claw
-		 *
-		 * Fifth:  Excrete Tube
-		 */
+				if (mid)
+				{
+					if (lft)
+					{
+						System.out.println("Turn LFT");
+						drive.setLeftRightMotorSpeeds(0, -.5);
+					}
+					else if (rt)
+					{
+						System.out.println("Turn RT");
+						drive.setLeftRightMotorSpeeds(-.5, 0);
+					}
+					else
+					{
+						System.out.println("Straight");
+					drive.setLeftRightMotorSpeeds(-.25, -.25);
+					}
+
+				}
+			} else
+			{
+				drive.stop();
+				//Other Code
+				System.out.println("Other Code");
+				break;
+
+//				//Forward
+//				drive.goForwardSlow();
+//
+//				Timer.delay(5);
+//				arm.elbowUp();
+//
+//				Timer.delay(3.75);
+//				drive.stop();
+//				arm.elbowRun(0);
+//
+//				claw.wristRun(-.25);
+//				Timer.delay(.5);
+//				claw.wristRun(0);
+//
+//
+//				claw.spitterOut();
+//				Timer.delay(1);
+//
+//
+//				arm.elbowDwn();
+//				Timer.delay(1);
+//				claw.spitterRun(0);
+//				Timer.delay(.35);
+//
+//				arm.elbowRun(0);
+//
+//				//
+//				drive.goBackwardSlow();
+//				Timer.delay(1);
+//				drive.stop();
+//
+//				arm.elbowDwn();
+//				Timer.delay(1.5);
+//				arm.elbowRun(0);
+//
+//
+//				drive.goRight();
+//				Timer.delay(1.5);
+//				drive.stop();
+			}
+
+			/*
+			 * First:  Drive line following until T
+			 *
+			 * Second: Backup ~ 4 feet
+			 *
+			 * Third:  Raise arm
+			 *
+			 * Fourth: Tilt claw
+			 *
+			 * Fifth:  Excrete Tube
+			 */
+		}
 
 
 	}
@@ -217,30 +289,30 @@ public class MyRobot extends SimpleRobot
 		boolean high;
 
 		//Game Pad coltrols
-//		int arm_elbow_up = 6;
-//		int arm_elbow_dwn = 8;
-//		int claw_wrist_up = 5;
-//		int claw_wrist_dwn = 7;
+//              int arm_elbow_up = 6;
+//              int arm_elbow_dwn = 8;
+//              int claw_wrist_up = 5;
+//              int claw_wrist_dwn = 7;
 //
-//		int claw_spitter_in = 1;
-//		int claw_spitter_out = 4;
+//              int claw_spitter_in = 1;
+//              int claw_spitter_out = 4;
 //
-//		int claw_spitter_rotate_up = 2;
-//		int claw_spitter_rotate_dwn = 3;
+//              int claw_spitter_rotate_up = 2;
+//              int claw_spitter_rotate_dwn = 3;
 
 		//Joystick Controls
-//		int arm_elbow_up = 3;
-//		int arm_elbow_dwn = 2;
-//		int claw_wrist_up = 5;
-//		int claw_wrist_dwn = 4;
+//              int arm_elbow_up = 3;
+//              int arm_elbow_dwn = 2;
+//              int claw_wrist_up = 5;
+//              int claw_wrist_dwn = 4;
 //
-//		int claw_spitter_in = 7;//+trigger
-//		int claw_spitter_out = 6;
+//              int claw_spitter_in = 7;//+trigger
+//              int claw_spitter_out = 6;
 //
-//		int claw_spitter_rotate_up = 8;
-//		int claw_spitter_rotate_dwn = 9;
+//              int claw_spitter_rotate_up = 8;
+//              int claw_spitter_rotate_dwn = 9;
 //
-//		int move_act = 11;
+//              int move_act = 11;
 
 		//Logitech 3D BA JS
 		int arm_elbow_up = 5;
@@ -267,10 +339,10 @@ public class MyRobot extends SimpleRobot
 		{
 			drive.runThrottled(js1);
 
-			dslcd.println(DriverStationLCD.Line.kMain6, 1, " Elbow Pos: " + arm.getPos());
-			dslcd.println(DriverStationLCD.Line.kUser2, 1, " Wrist Pos: " + claw.getPos());
-
-			dslcd.updateLCD();
+//			dslcd.println(DriverStationLCD.Line.kMain6, 1, " Elbow Pos: " + arm.getPos());
+//			dslcd.println(DriverStationLCD.Line.kUser2, 1, " Wrist Pos: " + claw.getPos());
+//
+//			dslcd.updateLCD();
 
 			if (js1.getRawButton(10))
 			{
@@ -351,7 +423,6 @@ public class MyRobot extends SimpleRobot
 				claw.spitterOut();
 			else if (js1.getRawButton(claw_spitter_in))
 				claw.spitterIn(!haveTube.get());
-			
 			else if (js1.getRawAxis(6) > .8)
 				claw.spitterRotateTubeUp();
 			else if (js1.getRawAxis(6) < -.8)
@@ -360,32 +431,33 @@ public class MyRobot extends SimpleRobot
 				claw.spitterRun(0);
 
 
-//				else if (js1.getRawButton(claw_spitter_rotate_up))
-//					claw.spitterRotateTubeUp();
-//				else if (js1.getRawButton(claw_spitter_rotate_dwn))
-//					claw.spitterRotateTubeDwn();
-//				else
-//					claw.spitterRun(0);
+//                              else if (js1.getRawButton(claw_spitter_rotate_up))
+//                                      claw.spitterRotateTubeUp();
+//                              else if (js1.getRawButton(claw_spitter_rotate_dwn))
+//                                      claw.spitterRotateTubeDwn();
+//                              else
+//                                      claw.spitterRun(0);
 
 			if (js1.getRawButton(deploy_mini))
 			{
 				MBDS.deploy();
 
 			}
-			if(timer.get()>85)
+
+			// 90 100
+			if (timer.get() > 85)
 			{
-				ds.setDigitalOut(10,true);
-				ds.setDigitalOut(12,true);
-			}
-			else
+				ds.setDigitalOut(1, false);
+				ds.setDigitalOut(2, true);
+			} else
 			{
-				ds.setDigitalOut(10,false);
-				ds.setDigitalOut(12,false);
+				ds.setDigitalOut(1, true);
+				ds.setDigitalOut(2, false);
 			}
 			//10, 12
 
-			System.out.println("BatVolt: "+ds.getBatteryVoltage());
-
+			//System.out.println("BatVolt: "+ds.getBatteryVoltage());
+			//System.out.println(timer.get());
 
 			//junk
 			Timer.delay(0.005);
@@ -404,53 +476,4 @@ public class MyRobot extends SimpleRobot
 		{
 		}
 	}
-	//legacy - Ms Luces code
-	//
-	//				if (up == dwn) {
-//					//Move arm to mid
-//					if (arm.moveToMiddle(high)) {
-//						claw.moveToMiddle(high);
-//					}
-//				} else if (up && !dwn) {
-//					//Move to pos top
-//					if (arm.moveToTop(high)) {
-//						claw.moveToTop(high);
-//					}
-//				} else if (!up && dwn) {
-//					//move to pos bot
-//					if (arm.moveToBottom(high)) {
-//						claw.moveToBottom(high);
-//					}
-//				}
-	// junk
-	//
-//
-//			arm.wristRun(js2.getX());
-//			//arm.elbowRun(js2.getY());
-//
-//			if(js1.getRawButton(2))
-//			{
-//				claw.in();
-//				Timer.delay(0.05);
-//			}
-//			else if(js1.getRawButton(3))
-//			{
-//				claw.out();
-//				Timer.delay(0.05);
-//			}
-//			else
-//				claw.run(0);
-//
-//
-//
-//			if(js1.getRawButton(6))
-//				arm.elbowUp();
-//			else if(js1.getRawButton(7))
-//				arm.elbowDwn();
-//			else
-//				arm.elbowRun(0);
-//			if (js1.getTrigger()) {
-//				boolean there =  arm.moveToPickup();
-//				ds.setDigitalOut(1, there);
-//			}
 }
