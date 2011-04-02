@@ -43,6 +43,7 @@ public class MyRobot extends SimpleRobot
 	DigitalInput p_mid = new DigitalInput(1);
 	DigitalInput p_lft = new DigitalInput(2);
 	DigitalInput p_rt = new DigitalInput(3);
+	DigitalInput autoSw = new DigitalInput(4);
 	double armGoTo, clawGoTo;
 	boolean mid, lft, rt;
 	int blink_count = 0;
@@ -91,169 +92,187 @@ public class MyRobot extends SimpleRobot
 		initialize();
 		System.out.println("Entering Auto: ");
 
-
-		// T Code
-		while ( isAutonomous() && isEnabled() && timer.get() < 15)
+		if (autoSw.get() == false)
 		{
-			Timer.delay(.05);
-			mid = p_mid.get();
-			lft = p_lft.get();
-			rt = p_rt.get();
-
-			System.out.println("Mid: " + mid + " | Lft: " + lft + " | Rt: " + rt);
-
-
-			if (!lft && !rt)
+			// T Code
+			while (isAutonomous() && isEnabled() && timer.get() < 15)
 			{
-				drive.setLeftRightMotorSpeeds(-.375, -.375);
-				System.out.println("straight");
-			}
-			if (lft)
-			{
-				drive.setLeftRightMotorSpeeds(0, -.5);
-				System.out.println("lft");
-			} else if (rt)
-			{
-				drive.setLeftRightMotorSpeeds(-.5, 0);
-				System.out.println("rt");
-			}
-			if (lft && rt)
-			{
-
-				//Backup from the T
-				drive.goForwardSlow(); //this is opposite of what you think because of the new robot
-				// for some reason forward == backward now
-				Timer.delay(2.75);  //change from 1.25 //change from 1.75 //change from 2.25
-				drive.stop();
-
-				//Raise Arm
-				arm.elbowUp();
-				Timer.delay(3.5);
-				arm.elbowRun(0);
-
-				//Go FWD
-				drive.goBackwardSlow();
-				Timer.delay(.35); //changed from .28
-				drive.stop();
-
-				//Lower Wrist
-				claw.wristRun(-.25);
-				Timer.delay(.5);
-				claw.wristRun(0);
-
-				//Hang Tube
-				claw.spitterOut();
-				Timer.delay(2);
-				claw.spitterRun(0);
-
-				if (timer.get() > 15)
-					break;
-
-				//Backup Slow
-				drive.goForwardSlow();
-				Timer.delay(2);
-				drive.stop();
-
-				if (timer.get() > 15)
-					break;
-
-				//Lower arm
-				arm.elbowDwn();
-				Timer.delay(1.5); //11.03
-				arm.elbowRun(0);
-
-				if (timer.get() > 15)
-					break;
-
-
-				return;
-			}
-		}
-
-
-		//Y code
-		while (false && isAutonomous() && isEnabled() && timer.get() < 15)
-		{
-			Timer.delay(.05);
-			mid = p_mid.get();
-			lft = !p_lft.get();
-			rt = !p_rt.get();
-
-			System.out.println("Mid: " + mid + " | Lft: " + lft + " | Rt: " + rt);
-
-
-			if (timer.get() > 3 && timer.get() < 6.5)
-				arm.elbowUp();
-			else
-				arm.stop();
-
-
-			if (!lft && !rt)
-			{
-				drive.setLeftRightMotorSpeeds(-.375, -.375);
-				System.out.println("straight");
-			}
-			if (lft)
-			{
-				drive.setLeftRightMotorSpeeds(0, -.5);
-				System.out.println("lft");
-			} else if (rt)
-			{
-				drive.setLeftRightMotorSpeeds(-.5, 0);
-				System.out.println("rt");
-			}
-			if (lft && rt)
-			{
-				System.out.println("Entering Stream - Hit the Y");
-				drive.stop();
-
-				drive.goForwardSlow();
-				Timer.delay(.0626);
-				drive.stop();
+				Timer.delay(.05);
+				mid = p_mid.get();
 				lft = !p_lft.get();
 				rt = !p_rt.get();
 
-				while (!(lft || rt))
+				System.out.println("Mid: " + mid + " | Lft: " + lft + " | Rt: " + rt);
+
+
+				if (!lft && !rt)
 				{
-					System.out.println("Going left");
-					drive.goLeft();
-					Timer.delay(.005);
-					lft = !p_lft.get();
-					rt = !p_rt.get();
+					drive.setLeftRightMotorSpeeds(-.375, -.375);
+					System.out.println("straight");
 				}
 
+				if (lft)
+				{
+					drive.setLeftRightMotorSpeeds(.25, -.375);
+					System.out.println("lft");
+				} else if (rt)
+				{
+					drive.setLeftRightMotorSpeeds(-.375, .25);
+					System.out.println("rt");
+				}
+				if (lft && rt)
+				{
+					System.out.println("TTTTTTTTTTTTTT");
+					claw.wristUp();
+					Timer.delay(.25);
+					claw.wristRun(0);
 
-				System.out.println("Lower Wrist");
-				claw.wristRun(-.25);
-				Timer.delay(.5);
-				claw.wristRun(0);
+					//Backup from the T
+					System.out.println("Back Slow");
+					drive.goBackwardSlow();       //this is opposite of what you think because of the new robot
+					// for some reason forward == backward now
+					Timer.delay(1.5);  //change from 1.25 //change from 1.75 //change from 2.25
+					drive.stop();
 
-				System.out.println("Hang Tube");
-				claw.spitterOut();
-				Timer.delay(2);
-				claw.spitterRun(0);
+					System.out.println("Raise Arm");
+					arm.elbowUp();
+					Timer.delay(3.75);//3.5
+					arm.elbowRun(0);
 
-				if (timer.get() > 15)
-					break;
+					System.out.println("Forward Slow");
+					drive.goForwardSlow();
+					Timer.delay(.85); //changed from .28 // .35
+					drive.stop();
 
-				System.out.println("Backup Slow");
-				drive.goForwardSlow();
-				Timer.delay(2);
-				drive.stop();
+					System.out.println("Lower Wrist");
+					claw.wristRun(-.25);
+					Timer.delay(.5);
+					claw.wristRun(0);
 
-				if (timer.get() > 15)
-					break;
+					System.out.println("Hang Tube");
+					claw.spitterOut();
+					Timer.delay(2);
+					claw.spitterRun(0);
 
-				System.out.println("Lower arm");
-				arm.elbowDwn();
-				Timer.delay(1.5); //11.03
-				arm.elbowRun(0);
+					if (timer.get() > 15)
+					{
+						System.out.println("Break 1");
+						break;
+					}
 
-				if (timer.get() > 15)
-					break;
+					System.out.println("Backup Slow");
+					drive.goBackwardSlow();
+					Timer.delay(2);
+					drive.stop();
+
+					if (timer.get() > 15)
+					{
+						System.out.println("Break 2");
+						break;
+					}
+
+					System.out.println("Lower arm");
+					arm.elbowDwn();
+					Timer.delay(1.5); //11.03
+					arm.elbowRun(0);
+
+					if (timer.get() > 15)
+					{
+						System.out.println("Break 3");
+						break;
+					}
+
+					System.out.println("Done");
+					return;
+				}
+			}
+		} else if (autoSw.get() == true) //Y Code
+		{
+
+			//Y code
+			while ( isAutonomous() && isEnabled() && timer.get() < 15)
+			{
+				Timer.delay(.05);
+				mid = p_mid.get();
+				lft = !p_lft.get();
+				rt = !p_rt.get();
+
+				System.out.println("Mid: " + mid + " | Lft: " + lft + " | Rt: " + rt);
 
 
-				return;
+				if (timer.get() > 3 && timer.get() < 6.5)
+					arm.elbowUp();
+				else
+					arm.stop();
+
+
+				if (!lft && !rt)
+				{
+					drive.setLeftRightMotorSpeeds(-.25, -.25);
+					System.out.println("straight");
+				}
+				if (lft)
+				{
+					drive.setLeftRightMotorSpeeds(0, -.5);
+					System.out.println("lft");
+				} else if (rt)
+				{
+					drive.setLeftRightMotorSpeeds(-.5, 0);
+					System.out.println("rt");
+				}
+				if (lft && rt)
+				{
+					System.out.println("Entering Stream - Hit the Y");
+					drive.stop();
+
+					drive.goForwardSlow();
+					Timer.delay(.0626);
+					drive.stop();
+					lft = !p_lft.get();
+					rt = !p_rt.get();
+
+					while (!(lft || rt))
+					{
+						System.out.println("Going left");
+						drive.goLeft();
+						Timer.delay(.005);
+						lft = !p_lft.get();
+						rt = !p_rt.get();
+					}
+
+
+					System.out.println("Lower Wrist");
+					claw.wristRun(-.25);
+					Timer.delay(.5);
+					claw.wristRun(0);
+
+					System.out.println("Hang Tube");
+					claw.spitterOut();
+					Timer.delay(2);
+					claw.spitterRun(0);
+
+					if (timer.get() > 15)
+						break;
+
+					System.out.println("Backup Slow");
+					drive.goForwardSlow();
+					Timer.delay(2);
+					drive.stop();
+
+					if (timer.get() > 15)
+						break;
+
+					System.out.println("Lower arm");
+					arm.elbowDwn();
+					Timer.delay(1.5); //11.03
+					arm.elbowRun(0);
+
+					if (timer.get() > 15)
+						break;
+
+
+					return;
+				}
 			}
 		}
 
@@ -282,6 +301,8 @@ public class MyRobot extends SimpleRobot
 
 		while (isOperatorControl() && isEnabled())
 		{
+			//System.out.println(autoSw.get());
+
 			if (js1.getRawButton(7)) //up
 				MBDS.pinPull(0);
 			else if (js1.getRawButton(9))
@@ -416,7 +437,7 @@ public class MyRobot extends SimpleRobot
 
 
 
-			if (timer.get() > 105 || override || ds.getDigitalIn(1)) //Pull the pin just before the end game
+			if (timer.get() > 109 || override || ds.getDigitalIn(1)) //Pull the pin just before the end game
 			{
 				MBDS.pinPull();
 			}
@@ -451,6 +472,8 @@ public class MyRobot extends SimpleRobot
 			MBDS.pinPull(false);
 			if (js1.getRawButton(8))
 				System.out.println("Mid: " + mid + " | Lft: " + lft + " | Rt: " + rt);
+
+			drive.stop();
 		}
 	}
 }

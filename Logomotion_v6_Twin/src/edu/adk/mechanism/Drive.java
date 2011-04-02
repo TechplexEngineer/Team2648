@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Drive implements Mechanism{
     private static final double SPEED_STOP            =  0.0;
-    private static final double SPEED_FWD_MAX         = 1; //change
-    private static final double SPEED_REV_MAX         = -1; //change
+    private static final double SPEED_FWD_MAX         = -1; //change
+    private static final double SPEED_REV_MAX         = 1; //change
 
 	Jaguar  left_front	= new Jaguar(1);
 	Jaguar	left_rear	= new Jaguar(2);
